@@ -1,0 +1,8 @@
+TITLE: AUDIO VISUAL REACT
+SUBTITLE: 3D Geometric Audio-Reactive Studio Visualizer
+DESCRIPTION: Fullscreen audio-reactive studio backdrop with 5 pure 3D geometric engines (Geodesic Spectrum, Hyper Tesseract, Cyber Warp Tunnel, Quantum Synchrotron, Matrix Monolith), Minimal & Turbo motion styles, 7 non-black atmospheric palettes (including Swiss Paper White light mode), speaker avatar badge, scalable QR station with optional CTA/URL badges, full-width bottom spectrogram, and instant PWA offline support.
+STATUS: active
+TAGS: PWA, Web Audio, 3D Geometric Canvas, Audio-Reactive, Studio Backdrop, Stream Overlay, QR Generator
+URL: index.html
+DATE: 19 October 2026
+SORT_DATE: 2026-10-19
