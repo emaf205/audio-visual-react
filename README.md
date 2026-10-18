@@ -1,5 +1,12 @@
 # AUDIO VISUAL REACT — 3D Geometric Audio-Reactive Studio Visualizer (v5.0.0)
 
+[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-emanuelebdc.com%2Fideas%2Faudio--visual--react-00F0FF?style=for-the-badge&logo=googlechrome&logoColor=black)](https://emanuelebdc.com/ideas/audio-visual-react/)
+[![Ideas Hub](https://img.shields.io/badge/IDEAS%20HUB-emanuelebdc.com%2Fideas-CCFF00?style=for-the-badge&logoColor=black)](https://emanuelebdc.com/ideas/)
+[![PWA Ready](https://img.shields.io/badge/PWA-OFFLINE%20READY-white?style=for-the-badge&logo=pwa&logoColor=black)](https://emanuelebdc.com/ideas/audio-visual-react/)
+
+> 🚀 **Live Online App**: [https://emanuelebdc.com/ideas/audio-visual-react/](https://emanuelebdc.com/ideas/audio-visual-react/)  
+> 🌐 **EmaF205 Ideas Hub**: [https://emanuelebdc.com/ideas/](https://emanuelebdc.com/ideas/)  
+>
 > **Fullscreen audio-reactive studio visualizer and stage backdrop featuring 5 monumental 3D geometric engines, Minimal and Turbo motion dynamics, 7 curated non-black atmospheric palettes (including Swiss Paper White light mode), customizable speaker profile card, QR station with optional CTA/URL badges, full-width bottom spectrogram, and instant PWA offline support.**  
 > Designed and engineered by **Emanuele BDC (EmaF205)**.
 
