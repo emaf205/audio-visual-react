@@ -10,7 +10,7 @@
 [![Live Web App](https://img.shields.io/badge/Live_App-emanuelebdc.com%2Fideas%2Faudio--visual--react-dfff00?style=for-the-badge&logo=googlechrome&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 [![Ideas Hub](https://img.shields.io/badge/Ideas_Hub-emanuelebdc.com%2Fideas-black?style=for-the-badge&logo=safari&logoColor=white)](https://emanuelebdc.com/ideas/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-emaf205%2Faudio--visual--react-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/emaf205/audio-visual-react)
-[![Version 5.2.1](https://img.shields.io/badge/Version-5.2.1-black?style=for-the-badge)](VERSION.txt)
+[![Version 5.3.0](https://img.shields.io/badge/Version-5.3.0-black?style=for-the-badge)](VERSION.txt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
 [![60 FPS Canvas](https://img.shields.io/badge/Performance-60_FPS-00f0ff?style=for-the-badge&logo=webgl&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 
@@ -78,12 +78,19 @@ Every channel is built on pure geometric mathematics, calculating 3D perspective
   - Draggable anywhere on the canvas with spring settling.
   - Toggleable circular profile photo badge (upload custom file or paste image URL).
   - Modular S / M / L typography scales with tight Swiss tracking.
-- **Station 2: Scalable QR & Media Hub**:
+- **Station 2: Theme-Reactive Geometric Digital Clock Widget**:
+  - Live architectural digital clock (`HH:MM:SS` with toggleable seconds and calendar date/UTC offset).
+  - Dynamically adopts the active visualizer atmosphere colors (`--clock-accent`, `--clock-glow`, `--clock-primary`).
+  - Draggable separately or dockable in unified mode.
+- **Station 3: Scalable QR & Dual Media Hub**:
+  - Independent toggles for **QR Code** and **Custom Image**: display QR only, Image only, **both simultaneously** (side-by-side / stacked responsive chassis), or neither.
   - Instant client-side QR Code generation with custom target link (`emanuelebdc.com` default).
   - Optional action CTA badge (*SCAN TO CONNECT*) and secondary URL text label.
-  - Switchable to custom image showcase mode.
   - Quick S / M / L size cycling by clicking the corner resize badge.
-- **Station 3: Bottom Spectrogram Dock**:
+- **Station 4: Unified Vertical Dock (Stack Mode)**:
+  - Dock all chosen stations (Title, Clock, Media) into a single vertical movable card.
+  - Drag the entire column together as one unit or toggle off to float them separately.
+- **Station 5: Bottom Spectrogram Dock**:
   - 1/4 screen height frequency analyzer featuring 72 precision audio bars with gradient fills and peak pip retention.
   - Real-time frequency axis labels (32Hz to 16kHz).
 - **Station 4: Motion Profiles (Minimal vs. Turbo)**:

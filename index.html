@@ -24,7 +24,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=521">
+  <link rel="stylesheet" href="style.css?v=530">
 </head>
 <body>
 
@@ -53,14 +53,52 @@
       </div>
     </div>
 
-    <!-- QR / Media Card -->
+    <!-- Geometric Digital Clock Widget -->
+    <div id="clock-widget" class="clock-widget hidden">
+      <div class="clock-header-bar">
+        <div class="clock-live-indicator">
+          <span class="clock-pulse-dot"></span>
+          <span class="clock-live-tag">LIVE SYNC</span>
+        </div>
+        <span class="clock-tz-tag" id="clock-tz-tag">UTC</span>
+      </div>
+      <div class="clock-digits-container">
+        <span class="clock-digits" id="clock-digits">12:00:00</span>
+      </div>
+      <div class="clock-date-row" id="clock-date-row">
+        <span class="clock-date-text" id="clock-date-text">MON, 19 OCT 2026</span>
+      </div>
+    </div>
+
+    <!-- QR / Media Card (Supports QR, Custom Image, or Both Simultaneously) -->
     <div id="media-card" class="media-card">
-      <div id="media-cta" class="media-cta hidden">SCAN TO CONNECT</div>
-      <div id="media-qr-container" class="media-qr-container"></div>
-      <img id="media-img-element" class="media-img-element hidden" alt="Media" />
-      <div id="media-url" class="media-url hidden">emanuelebdc.com</div>
+      <div id="media-items-container" class="media-items-container">
+        <!-- QR Sub-Block -->
+        <div id="media-qr-block" class="media-sub-block">
+          <div id="media-cta" class="media-cta hidden">SCAN TO CONNECT</div>
+          <div id="media-qr-container" class="media-qr-container"></div>
+          <div id="media-url" class="media-url hidden">emanuelebdc.com</div>
+        </div>
+        <!-- Custom Image Sub-Block -->
+        <div id="media-img-block" class="media-sub-block hidden">
+          <img id="media-img-element" class="media-img-element" src="assets/ema-portrait.jpg" alt="Media" />
+        </div>
+      </div>
       <div id="media-resize-handle" class="resize-handle corner-br" title="Tap to resize">
         <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M11 1v10H1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <!-- Unified Vertical Card Container (Stack Mode) -->
+    <div id="unified-card" class="unified-card hidden">
+      <div class="unified-drag-handle">
+        <span class="unified-grip-icon">⠿</span>
+        <span class="unified-handle-title">STUDIO HUD DOCK</span>
+      </div>
+      <div class="unified-stack-body">
+        <div class="unified-slot" data-slot="title"></div>
+        <div class="unified-slot" data-slot="clock"></div>
+        <div class="unified-slot" data-slot="media"></div>
       </div>
     </div>
 
@@ -282,7 +320,23 @@
           </div>
         </div>
 
-        <!-- 4. Title Card -->
+        <!-- 4. Unified HUD Dock (Stack Mode) -->
+        <div class="ios-card-group">
+          <div class="ios-group-header">
+            <span class="ios-group-title">UNIFIED HUD DOCK</span>
+            <label class="toggle-switch">
+              <input id="toggle-unified-stack" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ios-group-body" id="group-unified-body">
+            <div class="ios-sublabel" style="line-height: 1.45; color: rgba(255, 255, 255, 0.75);">
+              Dock all active stations (Title, Clock, Media) into a single vertical movable card.
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Title Card -->
         <div class="ios-card-group">
           <div class="ios-group-header">
             <span class="ios-group-title">TITLE CARD</span>
@@ -329,10 +383,44 @@
           </div>
         </div>
 
-        <!-- 5. QR Code & Media Station -->
+        <!-- 6. Geometric Digital Clock Widget -->
         <div class="ios-card-group">
           <div class="ios-group-header">
-            <span class="ios-group-title">QR / MEDIA STATION</span>
+            <span class="ios-group-title">CLOCK WIDGET</span>
+            <label class="toggle-switch">
+              <input id="toggle-clock-widget" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ios-group-body" id="group-clock-body">
+            <div class="ios-row-item huge-toggle-row">
+              <div>
+                <div class="ios-row-title">SHOW SECONDS</div>
+                <div class="ios-sublabel">Live ticking precision</div>
+              </div>
+              <label class="toggle-switch">
+                <input id="toggle-clock-seconds" type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="ios-row-item huge-toggle-row">
+              <div>
+                <div class="ios-row-title">SHOW DATE ROW</div>
+                <div class="ios-sublabel">Calendar date & UTC offset</div>
+              </div>
+              <label class="toggle-switch">
+                <input id="toggle-clock-date" type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. QR Code & Media Station (Independent QR and Image Toggles) -->
+        <div class="ios-card-group">
+          <div class="ios-group-header">
+            <span class="ios-group-title">MEDIA STATION</span>
             <label class="toggle-switch">
               <input id="toggle-media-card" type="checkbox" checked>
               <span class="toggle-slider"></span>
@@ -340,20 +428,24 @@
           </div>
           <div class="ios-group-body" id="group-media-body">
             <div class="ios-row-item-col">
-              <span class="ios-sublabel">STATION MODE</span>
-              <div class="huge-segmented-control">
-                <button type="button" class="mode-chip-btn active" id="btn-mode-qr">QR CODE</button>
-                <button type="button" class="mode-chip-btn" id="btn-mode-img">IMAGE</button>
-              </div>
-            </div>
-
-            <div class="ios-row-item-col">
               <span class="ios-sublabel">CARD SIZE</span>
               <div class="huge-segmented-control">
                 <button type="button" class="size-chip-btn" data-media-size="s">S</button>
                 <button type="button" class="size-chip-btn active" data-media-size="m">M</button>
                 <button type="button" class="size-chip-btn" data-media-size="l">L</button>
               </div>
+            </div>
+
+            <!-- Independent Toggle: QR Code -->
+            <div class="ios-row-item huge-toggle-row" style="margin-top: 6px;">
+              <div>
+                <div class="ios-row-title">QR CODE</div>
+                <div class="ios-sublabel">Interactive scan link</div>
+              </div>
+              <label class="toggle-switch">
+                <input id="toggle-qr-enable" type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
             </div>
 
             <div id="media-qr-fields">
@@ -380,6 +472,18 @@
               <div id="qr-url-input-row" class="hidden" style="margin-top: 6px;">
                 <input id="input-qr-display-url" class="form-input ios-input" type="text" placeholder="Display URL..." maxlength="40" value="emanuelebdc.com">
               </div>
+            </div>
+
+            <!-- Independent Toggle: Second / Custom Image -->
+            <div class="ios-row-item huge-toggle-row" style="margin-top: 10px;">
+              <div>
+                <div class="ios-row-title">CUSTOM IMAGE</div>
+                <div class="ios-sublabel">Show second image or artwork</div>
+              </div>
+              <label class="toggle-switch">
+                <input id="toggle-img-enable" type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
 
             <div id="media-img-fields" class="hidden">
@@ -411,8 +515,8 @@
     </div>
   </div>
 
-  <script src="qrcode.min.js?v=521"></script>
-  <script src="visuals.js?v=521"></script>
-  <script src="app.js?v=521"></script>
+  <script src="qrcode.min.js?v=530"></script>
+  <script src="visuals.js?v=530"></script>
+  <script src="app.js?v=530"></script>
 </body>
 </html>

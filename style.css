@@ -343,6 +343,42 @@ body.theme-light :focus-visible {
 .media-card.size-l .media-cta { font-size: 11px; padding: 4px 8px; }
 .media-card.size-l .media-url { font-size: 10.5px; }
 
+/* Dual Media Layout (Both QR and Custom Image Active) */
+.media-card.dual-media.size-s {
+  width: 200px;
+  padding: 8px 10px;
+}
+.media-card.dual-media.size-m {
+  width: 300px;
+  padding: 10px 14px;
+}
+.media-card.dual-media.size-l {
+  width: 420px;
+  padding: 12px 18px;
+}
+
+.media-items-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.media-sub-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.media-sub-block.hidden {
+  display: none !important;
+}
+
 .media-qr-container {
   width: 100%;
   display: flex;
@@ -371,9 +407,239 @@ body.theme-light :focus-visible {
   display: block;
 }
 
+.media-card.size-s .media-img-element { width: 76px; height: 76px; }
+.media-card.size-m .media-img-element { width: 120px; height: 120px; }
+.media-card.size-l .media-img-element { width: 176px; height: 176px; }
+
 .media-img-element.hidden,
 .media-qr-container.hidden {
   display: none !important;
+}
+
+/* =========================================================================
+   CLOCK WIDGET: Geometric Live Digital Clock (Theme Color Reactive)
+   ========================================================================= */
+.clock-widget {
+  position: absolute;
+  top: clamp(20px, 3.5vw, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 4, 8, 0.94);
+  border: 2px solid var(--clock-accent, var(--white-optic));
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.92), 0 0 18px var(--clock-glow, rgba(0, 212, 255, 0.35));
+  pointer-events: auto;
+  z-index: 20;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  box-sizing: border-box;
+  transition: opacity 0.25s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.clock-widget.is-dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.98), 0 0 28px var(--clock-glow, rgba(0, 212, 255, 0.6));
+  transform: scale(1.02);
+  transition: none !important;
+}
+
+.clock-widget.hidden {
+  display: none !important;
+}
+
+.clock-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+  gap: 14px;
+}
+
+.clock-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clock-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--clock-accent, var(--acid-lime));
+  box-shadow: 0 0 8px var(--clock-accent, var(--acid-lime));
+  animation: clockPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes clockPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+
+.clock-live-tag {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--clock-accent, var(--acid-lime));
+}
+
+.clock-tz-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.clock-digits-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.clock-digits {
+  font-family: var(--font-mono);
+  font-size: clamp(26px, 3.4vw, 40px);
+  font-weight: 800;
+  color: var(--clock-accent, var(--white-optic));
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 14px var(--clock-glow, rgba(0, 212, 255, 0.45));
+  transition: color 0.35s ease, text-shadow 0.35s ease;
+}
+
+.clock-date-row {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+}
+
+.clock-date-row.hidden {
+  display: none !important;
+}
+
+/* =========================================================================
+   UNIFIED VERTICAL DOCK: Monolithic Draggable Pillar (Stack Mode)
+   ========================================================================= */
+.unified-card {
+  position: absolute;
+  top: clamp(20px, 3.5vw, 48px);
+  left: clamp(20px, 3.5vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(4, 4, 8, 0.94);
+  border: 2px solid var(--white-optic);
+  border-radius: 12px;
+  padding: 10px 14px 14px 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(255, 255, 255, 0.12);
+  pointer-events: auto;
+  z-index: 22;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  box-sizing: border-box;
+  max-width: min(92vw, 440px);
+  width: fit-content;
+  transition: opacity 0.25s ease;
+}
+
+.unified-card.is-dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.98), 0 0 32px var(--clock-glow, rgba(0, 240, 255, 0.4));
+  transform: scale(1.015);
+  transition: none !important;
+}
+
+.unified-card.hidden {
+  display: none !important;
+}
+
+.unified-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px 8px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 2px;
+  color: var(--white-optic);
+}
+
+.unified-grip-icon {
+  font-size: 16px;
+  letter-spacing: -1px;
+  color: var(--acid-lime);
+}
+
+.unified-handle-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+}
+
+.unified-stack-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.unified-slot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.unified-slot:empty {
+  display: none !important;
+}
+
+/* Child overrides when docked inside .unified-card */
+.unified-card .text-banner,
+.unified-card .clock-widget,
+.unified-card .media-card {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  cursor: default !important;
+}
+
+.unified-card .text-banner {
+  box-shadow: none !important;
+  border-width: 1px 1px 1px 5px !important;
+}
+.unified-card .clock-widget {
+  box-shadow: none !important;
+  border-width: 1px !important;
+}
+.unified-card .media-card {
+  box-shadow: none !important;
+  border-width: 1px !important;
 }
 
 /* Tactile Resize Handle on Media Card (Tap to cycle S/M/L) */
@@ -401,7 +667,7 @@ body.theme-light :focus-visible {
 /* Status Toast Notification */
 .status-toast {
   position: absolute;
-  top: clamp(24px, 3.5vw, 44px);
+  top: clamp(138px, 18vh, 158px);
   left: 50%;
   transform: translateX(-50%) translateY(-20px);
   background: rgba(10, 10, 16, 0.95);
@@ -1352,6 +1618,38 @@ body.theme-light .mic-prompt {
   border-color: #000000;
   color: #000000;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+body.theme-light .clock-widget {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #000000;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+body.theme-light .clock-digits {
+  color: #000000;
+  text-shadow: none;
+}
+body.theme-light .clock-date-row,
+body.theme-light .clock-tz-tag {
+  color: rgba(0, 0, 0, 0.7);
+}
+body.theme-light .clock-live-tag,
+body.theme-light .clock-pulse-dot {
+  color: #000000;
+  background: #000000;
+  box-shadow: none;
+}
+body.theme-light .unified-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: #000000;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+body.theme-light .unified-drag-handle {
+  border-bottom-color: rgba(0, 0, 0, 0.12);
+  color: #000000;
+}
+body.theme-light .unified-handle-title,
+body.theme-light .unified-grip-icon {
+  color: #000000;
 }
 
 /* ==========================================================================

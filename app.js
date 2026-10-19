@@ -83,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // DOM Elements — STATION 2: QR & Media
   const mediaCard = document.getElementById('media-card');
+  const mediaItemsContainer = document.getElementById('media-items-container');
+  const mediaQrBlock = document.getElementById('media-qr-block');
+  const mediaImgBlock = document.getElementById('media-img-block');
   const mediaCta = document.getElementById('media-cta');
   const mediaQrContainer = document.getElementById('media-qr-container');
   const mediaImgElement = document.getElementById('media-img-element');
@@ -90,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const mediaResizeHandle = document.getElementById('media-resize-handle');
   const toggleMediaCard = document.getElementById('toggle-media-card');
   const groupMediaBody = document.getElementById('group-media-body');
-  const btnModeQr = document.getElementById('btn-mode-qr');
-  const btnModeImg = document.getElementById('btn-mode-img');
+  const toggleQrEnable = document.getElementById('toggle-qr-enable');
+  const toggleImgEnable = document.getElementById('toggle-img-enable');
   const mediaSizeBtns = document.querySelectorAll('.size-chip-btn[data-media-size]');
   const mediaQrFields = document.getElementById('media-qr-fields');
   const mediaImgFields = document.getElementById('media-img-fields');
@@ -105,6 +108,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputImgFile = document.getElementById('input-img-file');
   const inputImgUrl = document.getElementById('input-img-url');
   const imgPreviewThumb = document.getElementById('img-preview-thumb');
+
+  // DOM Elements — STATION 3: Geometric Digital Clock Widget
+  const clockWidget = document.getElementById('clock-widget');
+  const clockDigits = document.getElementById('clock-digits');
+  const clockDateRow = document.getElementById('clock-date-row');
+  const clockDateText = document.getElementById('clock-date-text');
+  const clockTzTag = document.getElementById('clock-tz-tag');
+  const toggleClockWidget = document.getElementById('toggle-clock-widget');
+  const toggleClockSeconds = document.getElementById('toggle-clock-seconds');
+  const toggleClockDate = document.getElementById('toggle-clock-date');
+  const groupClockBody = document.getElementById('group-clock-body');
+
+  // DOM Elements — STATION 4: Unified Vertical Card (Stack Mode)
+  const unifiedCard = document.getElementById('unified-card');
+  const toggleUnifiedStack = document.getElementById('toggle-unified-stack');
+  const groupUnifiedBody = document.getElementById('group-unified-body');
 
   // DOM Elements — Bottom Spectrogram (1/4 Screen Height)
   const bottomSpectrogram = document.getElementById('bottom-spectrogram');
@@ -151,14 +170,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_QR_URL = "https://emanuelebdc.com";
   const DEFAULT_AVATAR = "assets/ema-portrait.jpg";
 
-  // App State
+  // App State — Title
   let isTextVisible = true;
   let currentTextSize = localStorage.getItem('broadcast_text_size') || 'm';
   let isProfileVisible = localStorage.getItem('broadcast_show_profile') === 'true';
   let profileAvatarSrc = localStorage.getItem('broadcast_profile_img') || DEFAULT_AVATAR;
 
+  // App State — Clock Widget
+  let isClockVisible = localStorage.getItem('broadcast_show_clock') === 'true';
+  let isClockSeconds = localStorage.getItem('broadcast_clock_seconds') !== 'false';
+  let isClockDate = localStorage.getItem('broadcast_clock_date') !== 'false';
+
+  // App State — Unified Vertical Card
+  let isUnifiedStack = localStorage.getItem('broadcast_unified_stack') === 'true';
+
+  // App State — Media Station (Independent QR + Custom Image)
   let isMediaVisible = true;
-  let currentMediaMode = localStorage.getItem('broadcast_media_mode') || 'qr';
+  let isQrEnabled = localStorage.getItem('broadcast_show_qr') !== 'false';
+  let isImgEnabled = localStorage.getItem('broadcast_show_img') === 'true';
   let currentMediaSize = localStorage.getItem('broadcast_media_size') || 'm';
   let customImgData = localStorage.getItem('broadcast_custom_img') || DEFAULT_AVATAR;
   let isQrCtaVisible = localStorage.getItem('broadcast_show_qr_cta') === 'true';
@@ -318,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 3. QR & MEDIA CARD ---
+  // --- 3. QR & MEDIA CARD (Independent QR and Custom Image) ---
   function setMediaSize(size, updateStorage = true) {
     size = (size || 'm').toLowerCase();
     if (!['s', 'm', 'l'].includes(size)) size = 'm';
@@ -339,27 +368,27 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMediaContent();
   }
 
-  function setMediaMode(mode) {
-    currentMediaMode = mode === 'img' ? 'img' : 'qr';
-    safeStorageSet('broadcast_media_mode', currentMediaMode);
-
-    if (btnModeQr) btnModeQr.classList.toggle('active', currentMediaMode === 'qr');
-    if (btnModeImg) btnModeImg.classList.toggle('active', currentMediaMode === 'img');
-
-    if (mediaQrFields) mediaQrFields.classList.toggle('hidden', currentMediaMode !== 'qr');
-    if (mediaImgFields) mediaImgFields.classList.toggle('hidden', currentMediaMode !== 'img');
-
-    renderMediaContent();
-    showToast(currentMediaMode === 'qr' ? 'QR CODE' : 'CUSTOM IMAGE');
-  }
-
   function renderMediaContent() {
     if (!mediaCard) return;
 
-    if (currentMediaMode === 'qr') {
-      if (mediaImgElement) mediaImgElement.classList.add('hidden');
-      if (mediaQrContainer) {
-        mediaQrContainer.classList.remove('hidden');
+    const hasAnyMedia = isQrEnabled || isImgEnabled;
+    const shouldShowCard = isMediaVisible && hasAnyMedia;
+
+    if (!shouldShowCard) {
+      mediaCard.classList.add('hidden');
+      return;
+    }
+
+    mediaCard.classList.remove('hidden');
+
+    // Dual media mode (both QR and Custom Image active)
+    const isDual = isQrEnabled && isImgEnabled;
+    mediaCard.classList.toggle('dual-media', isDual);
+
+    // 1. QR Code Sub-Block
+    if (mediaQrBlock) {
+      mediaQrBlock.classList.toggle('hidden', !isQrEnabled);
+      if (isQrEnabled && mediaQrContainer) {
         mediaQrContainer.innerHTML = '';
         const link = (inputQrLink ? inputQrLink.value.trim() : '') || DEFAULT_QR_URL;
         safeStorageSet('broadcast_qr_url', link);
@@ -378,34 +407,47 @@ document.addEventListener('DOMContentLoaded', () => {
             });
           } catch (_) {}
         }
-      }
 
-      // Optional CTA Label
-      if (mediaCta) {
-        mediaCta.classList.toggle('hidden', !isQrCtaVisible);
-        const ctaText = inputQrCta ? inputQrCta.value.trim() : '';
-        mediaCta.textContent = ctaText || 'SCAN TO CONNECT';
-      }
+        if (mediaCta) {
+          mediaCta.classList.toggle('hidden', !isQrCtaVisible);
+          const ctaText = inputQrCta ? inputQrCta.value.trim() : '';
+          mediaCta.textContent = ctaText || 'SCAN TO CONNECT';
+        }
 
-      // Optional URL Label
-      if (mediaUrl) {
-        mediaUrl.classList.toggle('hidden', !isQrUrlVisible);
-        const urlText = inputQrDisplayUrl ? inputQrDisplayUrl.value.trim() : '';
-        mediaUrl.textContent = urlText || 'emanuelebdc.com';
+        if (mediaUrl) {
+          mediaUrl.classList.toggle('hidden', !isQrUrlVisible);
+          const urlText = inputQrDisplayUrl ? inputQrDisplayUrl.value.trim() : '';
+          mediaUrl.textContent = urlText || 'emanuelebdc.com';
+        }
       }
-    } else {
-      // Image Mode
-      if (mediaQrContainer) mediaQrContainer.classList.add('hidden');
-      if (mediaCta) mediaCta.classList.add('hidden');
-      if (mediaUrl) mediaUrl.classList.add('hidden');
-      if (mediaImgElement) {
-        mediaImgElement.classList.remove('hidden');
+    }
+
+    // 2. Custom Image Sub-Block
+    if (mediaImgBlock) {
+      mediaImgBlock.classList.toggle('hidden', !isImgEnabled);
+      if (isImgEnabled && mediaImgElement) {
         mediaImgElement.src = customImgData;
         if (imgPreviewThumb) imgPreviewThumb.src = customImgData;
       }
     }
+  }
 
-    mediaCard.classList.toggle('hidden', !isMediaVisible);
+  function setQrEnabled(enable) {
+    isQrEnabled = !!enable;
+    safeStorageSet('broadcast_show_qr', isQrEnabled.toString());
+    if (toggleQrEnable) toggleQrEnable.checked = isQrEnabled;
+    if (mediaQrFields) mediaQrFields.classList.toggle('hidden', !isQrEnabled);
+    renderMediaContent();
+    showToast(isQrEnabled ? 'QR CODE: ON' : 'QR CODE: OFF');
+  }
+
+  function setImgEnabled(enable) {
+    isImgEnabled = !!enable;
+    safeStorageSet('broadcast_show_img', isImgEnabled.toString());
+    if (toggleImgEnable) toggleImgEnable.checked = isImgEnabled;
+    if (mediaImgFields) mediaImgFields.classList.toggle('hidden', !isImgEnabled);
+    renderMediaContent();
+    showToast(isImgEnabled ? 'CUSTOM IMAGE: ON' : 'CUSTOM IMAGE: OFF');
   }
 
   if (mediaSizeBtns) {
@@ -418,12 +460,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (btnModeQr) btnModeQr.addEventListener('click', () => setMediaMode('qr'));
-  if (btnModeImg) btnModeImg.addEventListener('click', () => setMediaMode('img'));
+  if (toggleQrEnable) {
+    toggleQrEnable.addEventListener('change', (e) => setQrEnabled(e.target.checked));
+  }
 
-  if (inputQrLink) inputQrLink.addEventListener('input', () => { if (currentMediaMode === 'qr') renderMediaContent(); });
+  if (toggleImgEnable) {
+    toggleImgEnable.addEventListener('change', (e) => setImgEnabled(e.target.checked));
+  }
 
-  // CTA & URL Toggles
+  if (inputQrLink) {
+    inputQrLink.addEventListener('input', () => {
+      if (isQrEnabled) renderMediaContent();
+    });
+  }
+
   if (toggleQrCta) {
     toggleQrCta.addEventListener('change', (e) => {
       isQrCtaVisible = e.target.checked;
@@ -448,13 +498,12 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleMediaCard.addEventListener('change', (e) => {
       isMediaVisible = e.target.checked;
       safeStorageSet('broadcast_show_media', isMediaVisible.toString());
-      if (mediaCard) mediaCard.classList.toggle('hidden', !isMediaVisible);
       if (groupMediaBody) groupMediaBody.style.display = isMediaVisible ? 'flex' : 'none';
+      renderMediaContent();
       showToast(isMediaVisible ? 'MEDIA: ON' : 'MEDIA: OFF');
     });
   }
 
-  // Tap corner handle to cycle media size S -> M -> L
   if (mediaResizeHandle) {
     mediaResizeHandle.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -465,7 +514,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Upload custom image
   if (inputImgFile) {
     inputImgFile.addEventListener('change', (e) => {
       const file = e.target.files && e.target.files[0];
@@ -491,6 +539,103 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('IMAGE UPDATED');
       }
     });
+  }
+
+  // --- 3B. CLOCK WIDGET LOGIC ---
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    if (clockDigits) {
+      clockDigits.textContent = isClockSeconds ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}`;
+    }
+
+    if (clockDateText) {
+      const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const dayName = days[now.getDay()];
+      const monthName = months[now.getMonth()];
+      const dayNum = String(now.getDate()).padStart(2, '0');
+      const year = now.getFullYear();
+      clockDateText.textContent = `${dayName}, ${dayNum} ${monthName} ${year}`;
+    }
+
+    if (clockTzTag) {
+      const tzOffset = -now.getTimezoneOffset() / 60;
+      const sign = tzOffset >= 0 ? '+' : '';
+      clockTzTag.textContent = `UTC${sign}${tzOffset}`;
+    }
+  }
+
+  function setClockVisible(visible, updateStorage = true) {
+    isClockVisible = !!visible;
+    if (updateStorage) safeStorageSet('broadcast_show_clock', isClockVisible.toString());
+    if (toggleClockWidget) toggleClockWidget.checked = isClockVisible;
+    if (clockWidget) clockWidget.classList.toggle('hidden', !isClockVisible);
+    if (groupClockBody) groupClockBody.style.display = isClockVisible ? 'flex' : 'none';
+    if (isClockVisible) updateClock();
+    showToast(isClockVisible ? 'CLOCK: ON' : 'CLOCK: OFF');
+  }
+
+  if (toggleClockWidget) {
+    toggleClockWidget.addEventListener('change', (e) => setClockVisible(e.target.checked));
+  }
+
+  if (toggleClockSeconds) {
+    toggleClockSeconds.addEventListener('change', (e) => {
+      isClockSeconds = e.target.checked;
+      safeStorageSet('broadcast_clock_seconds', isClockSeconds.toString());
+      updateClock();
+      showToast(isClockSeconds ? 'SECONDS: ON' : 'SECONDS: OFF');
+    });
+  }
+
+  if (toggleClockDate) {
+    toggleClockDate.addEventListener('change', (e) => {
+      isClockDate = e.target.checked;
+      safeStorageSet('broadcast_clock_date', isClockDate.toString());
+      if (clockDateRow) clockDateRow.classList.toggle('hidden', !isClockDate);
+      updateClock();
+      showToast(isClockDate ? 'DATE: ON' : 'DATE: OFF');
+    });
+  }
+
+  setInterval(updateClock, 1000);
+
+  // --- 3C. UNIFIED VERTICAL CARD (STACK MODE) ---
+  function setUnifiedStack(enabled, updateStorage = true) {
+    isUnifiedStack = !!enabled;
+    if (updateStorage) safeStorageSet('broadcast_unified_stack', isUnifiedStack.toString());
+
+    if (toggleUnifiedStack) toggleUnifiedStack.checked = isUnifiedStack;
+    if (unifiedCard) unifiedCard.classList.toggle('hidden', !isUnifiedStack);
+
+    const slotTitle = unifiedCard ? unifiedCard.querySelector('.unified-slot[data-slot="title"]') : null;
+    const slotClock = unifiedCard ? unifiedCard.querySelector('.unified-slot[data-slot="clock"]') : null;
+    const slotMedia = unifiedCard ? unifiedCard.querySelector('.unified-slot[data-slot="media"]') : null;
+
+    if (isUnifiedStack) {
+      if (slotTitle && textBanner) slotTitle.appendChild(textBanner);
+      if (slotClock && clockWidget) slotClock.appendChild(clockWidget);
+      if (slotMedia && mediaCard) slotMedia.appendChild(mediaCard);
+      restoreCardPosition(unifiedCard, 'unified');
+      if (updateStorage) showToast('UNIFIED DOCK: ON');
+    } else {
+      if (textBanner && hudContainer) hudContainer.appendChild(textBanner);
+      if (clockWidget && hudContainer) hudContainer.appendChild(clockWidget);
+      if (mediaCard && hudContainer) hudContainer.appendChild(mediaCard);
+      restoreCardPosition(textBanner, 'text');
+      restoreCardPosition(clockWidget, 'clock');
+      restoreCardPosition(mediaCard, 'media');
+      if (unifiedCard) unifiedCard.classList.add('hidden');
+      if (updateStorage) showToast('UNIFIED DOCK: OFF');
+    }
+  }
+
+  if (toggleUnifiedStack) {
+    toggleUnifiedStack.addEventListener('change', (e) => setUnifiedStack(e.target.checked));
   }
 
   // --- 4. BOTTOM SPECTROGRAM DOCK (1/4 Viewport Height) ---
@@ -560,6 +705,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 5. DRAG & DROP WITH SPRING SETTLING ---
+  function restoreCardPosition(element, storageKey) {
+    if (!element) return;
+    const savedLeft = localStorage.getItem(`${storageKey}_left`);
+    const savedTop = localStorage.getItem(`${storageKey}_top`);
+    if (savedLeft !== null && savedTop !== null) {
+      element.style.left = `${Math.min(window.innerWidth - 80, Math.max(10, parseFloat(savedLeft)))}px`;
+      element.style.top = `${Math.min(window.innerHeight - 60, Math.max(10, parseFloat(savedTop)))}px`;
+      element.style.right = 'auto';
+      element.style.bottom = 'auto';
+    } else {
+      element.style.left = '';
+      element.style.top = '';
+      element.style.right = '';
+      element.style.bottom = '';
+    }
+  }
+
   function makeDraggable(element, storageKey) {
     if (!element) return;
 
@@ -567,18 +729,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0, startY = 0;
     let initialLeft = 0, initialTop = 0;
 
-    const savedLeft = localStorage.getItem(`${storageKey}_left`);
-    const savedTop = localStorage.getItem(`${storageKey}_top`);
-
-    if (savedLeft !== null && savedTop !== null) {
-      element.style.left = `${Math.min(window.innerWidth - 80, Math.max(10, parseFloat(savedLeft)))}px`;
-      element.style.top = `${Math.min(window.innerHeight - 60, Math.max(10, parseFloat(savedTop)))}px`;
-      element.style.right = 'auto';
-      element.style.bottom = 'auto';
-    }
+    restoreCardPosition(element, storageKey);
 
     function onPointerDown(e) {
-      if (e.target.closest('.resize-handle') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+      if (
+        e.target.closest('.resize-handle') ||
+        e.target.closest('input, textarea, button, a, label, select') ||
+        (isUnifiedStack && element !== unifiedCard)
+      ) return;
 
       isDragging = true;
       element.classList.add('is-dragging');
@@ -646,6 +804,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   makeDraggable(textBanner, 'text');
   makeDraggable(mediaCard, 'media');
+  makeDraggable(clockWidget, 'clock');
+  makeDraggable(unifiedCard, 'unified');
 
   // --- 6. 3D SCENE CONTROLS (5 Channels) ---
   const SHORT_SCENE_NAMES = ['GEODESIC', 'TESSERACT', 'WARP', 'SYNCHRO', 'MONOLITH'];
@@ -815,8 +975,18 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.toggle('active', idx === engine.themeIndex);
       });
     }
+
+    // Dynamic Clock & Visualizer Color Binding
+    const clockAccent = theme.secondary || theme.accent || '#00D4FF';
+    const clockGlow = theme.glow || 'rgba(0, 212, 255, 0.4)';
+    const clockPrimary = theme.primary || '#ffffff';
+    document.documentElement.style.setProperty('--clock-accent', clockAccent);
+    document.documentElement.style.setProperty('--clock-glow', clockGlow);
+    document.documentElement.style.setProperty('--clock-primary', clockPrimary);
+
     showToast(`THEME: ${theme.name}`);
   }
+  window.applyTheme = applyTheme;
 
   if (themeChipBtns) {
     themeChipBtns.forEach((btn) => {
@@ -837,6 +1007,13 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('text_left');
       localStorage.removeItem('text_top');
       localStorage.removeItem('broadcast_text_size');
+      localStorage.removeItem('clock_left');
+      localStorage.removeItem('clock_top');
+      localStorage.removeItem('unified_left');
+      localStorage.removeItem('unified_top');
+      localStorage.removeItem('broadcast_unified_stack');
+
+      setUnifiedStack(false, true);
 
       if (mediaCard) {
         mediaCard.style.left = '';
@@ -853,6 +1030,20 @@ document.addEventListener('DOMContentLoaded', () => {
         textBanner.style.bottom = '';
       }
       setTextSize('m');
+
+      if (clockWidget) {
+        clockWidget.style.left = '';
+        clockWidget.style.top = '';
+        clockWidget.style.right = '';
+        clockWidget.style.bottom = '';
+      }
+
+      if (unifiedCard) {
+        unifiedCard.style.left = '';
+        unifiedCard.style.top = '';
+        unifiedCard.style.right = '';
+        unifiedCard.style.bottom = '';
+      }
 
       showToast('LAYOUT RESET');
     });
@@ -1167,6 +1358,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toggleQrUrl) toggleQrUrl.checked = isQrUrlVisible;
     if (qrUrlInputRow) qrUrlInputRow.classList.toggle('hidden', !isQrUrlVisible);
 
+    if (toggleQrEnable) toggleQrEnable.checked = isQrEnabled;
+    if (mediaQrFields) mediaQrFields.classList.toggle('hidden', !isQrEnabled);
+
+    if (toggleImgEnable) toggleImgEnable.checked = isImgEnabled;
+    if (mediaImgFields) mediaImgFields.classList.toggle('hidden', !isImgEnabled);
+
+    if (toggleClockWidget) toggleClockWidget.checked = isClockVisible;
+    if (clockWidget) clockWidget.classList.toggle('hidden', !isClockVisible);
+    if (groupClockBody) groupClockBody.style.display = isClockVisible ? 'flex' : 'none';
+
+    if (toggleClockSeconds) toggleClockSeconds.checked = isClockSeconds;
+    if (toggleClockDate) toggleClockDate.checked = isClockDate;
+    if (clockDateRow) clockDateRow.classList.toggle('hidden', !isClockDate);
+
     if (toggleSpectrogram) toggleSpectrogram.checked = isSpectrogramVisible;
 
     const savedAutohide = localStorage.getItem('broadcast_autohide_menu');
@@ -1184,9 +1389,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setMediaSize(currentMediaSize, false);
-  setMediaMode(currentMediaMode);
+  renderMediaContent();
   setTextSize(currentTextSize, false);
   renderTitleCard();
+  updateClock();
+  setUnifiedStack(isUnifiedStack, false);
   updateSpectrogram();
   resetIdle();
 

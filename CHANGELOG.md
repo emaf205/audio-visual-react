@@ -5,6 +5,12 @@ All notable changes to **Audio Visual React** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.0] - 2026-10-19
+### Added
+- **Independent QR Code & Custom Image Toggles**: Media card now supports displaying QR code only, custom image only, **both simultaneously** (with adaptive `.dual-media` side-by-side / stacked responsive chassis), or neither.
+- **Theme-Reactive Geometric Digital Clock Widget**: Live architectural digital clock widget (`HH:MM:SS`, tabular monospace figures, live pulsing dot, and date/UTC offset indicator) that dynamically inherits active visualizer animation colors (`--clock-accent`, `--clock-glow`, `--clock-primary`).
+- **Unified Vertical Draggable Dock (Stack Mode)**: Capability to dock all active stations (Title, Clock, QR, Custom Image) into a single monolithic vertical movable pillar that can be dragged as a single unit or uncoupled into separate floating cards.
+
 ## [5.2.1] - 2026-10-19
 ### Enhanced
 - **WCAG Accessibility & Focus Trapping**: Added explicit `:focus-visible` high-contrast indicators, `role="dialog" aria-modal="true"` dialog semantics to the studio settings drawer, automatic keyboard focus cycling (`Tab`), and `Escape` key restoration.
