@@ -10,7 +10,7 @@
 [![Live Web App](https://img.shields.io/badge/Live_App-emanuelebdc.com%2Fideas%2Faudio--visual--react-dfff00?style=for-the-badge&logo=googlechrome&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 [![Ideas Hub](https://img.shields.io/badge/Ideas_Hub-emanuelebdc.com%2Fideas-black?style=for-the-badge&logo=safari&logoColor=white)](https://emanuelebdc.com/ideas/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-emaf205%2Faudio--visual--react-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/emaf205/audio-visual-react)
-[![Version 5.4.0](https://img.shields.io/badge/Version-5.4.0-black?style=for-the-badge)](VERSION.txt)
+[![Version 5.6.0](https://img.shields.io/badge/Version-5.6.0-black?style=for-the-badge)](VERSION.txt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
 [![60 FPS Canvas](https://img.shields.io/badge/Performance-60_FPS-00f0ff?style=for-the-badge&logo=webgl&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 

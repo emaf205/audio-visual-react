@@ -24,7 +24,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=540">
+  <link rel="stylesheet" href="style.css?v=560">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Title & Profile Card -->
-    <div id="text-banner" class="text-banner">
+    <div id="text-banner" class="text-banner hidden">
       <div id="text-profile-badge" class="text-profile-badge hidden">
         <img id="profile-img-element" class="profile-avatar-img" src="assets/ema-portrait.jpg" alt="Profile" />
       </div>
@@ -71,7 +71,7 @@
     </div>
 
     <!-- QR / Media Card (Supports QR, Custom Image, or Both Simultaneously) -->
-    <div id="media-card" class="media-card">
+    <div id="media-card" class="media-card hidden">
       <div id="media-items-container" class="media-items-container">
         <!-- QR Sub-Block -->
         <div id="media-qr-block" class="media-sub-block">
@@ -103,7 +103,7 @@
     </div>
 
     <!-- Digital LED Marquee Ticker ("Farmacia" / Cyber Matrix Ticker) -->
-    <div id="marquee-ticker" class="marquee-ticker hidden pos-bottom color-pharmacy">
+    <div id="marquee-ticker" class="marquee-ticker hidden pos-bottom color-theme size-xxl">
       <div class="marquee-icon-badge">
         <span class="marquee-cross-icon">✚</span>
         <span class="marquee-live-label">LIVE TICKER</span>
@@ -192,44 +192,119 @@
         <button id="settings-close-btn" class="settings-close-btn ios-close-btn" title="Close Panel" aria-label="Close Settings Panel">Done</button>
       </div>
 
+      <!-- Master Action Bar: Load Demo vs Reset Schermo -->
+      <div class="ios-master-actions">
+        <button type="button" id="btn-load-demo" class="ios-master-btn btn-demo" title="Attiva la demo completa con tutti gli elementi HUD">
+          <span class="btn-icon">⚡</span>
+          <span class="btn-label">LOAD DEMO</span>
+        </button>
+        <button type="button" id="btn-clear-all" class="ios-master-btn btn-clear" title="Svuota lo schermo: mostra solo le visualizzazioni">
+          <span class="btn-icon">↺</span>
+          <span class="btn-label">RESET SCHERMO</span>
+        </button>
+      </div>
+
       <div class="settings-sections">
 
-        <!-- 1. 3D Scenes (Enormous Instant Buttons) -->
+        <!-- 1. OVERLAY SULLO SCHERMO (COSA MOSTRARE) -->
         <div class="ios-card-group">
           <div class="ios-group-header">
-            <span class="ios-group-title">3D SCENES</span>
+            <span class="ios-group-title">COSA MOSTRARE SULLO SCHERMO</span>
+            <span class="ios-group-badge" id="active-overlays-count">0 ATTIVI</span>
+          </div>
+
+          <!-- Titolo & Nome -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">TITOLO BROADCAST</span>
+              <span class="ios-sublabel">Nome & canale in alto a sinistra</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-text-banner" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- QR Code & Media -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">QR CODE & MEDIA</span>
+              <span class="ios-sublabel">Codice QR o foto profilo</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-media-card" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Orologio Digitale -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">OROLOGIO DIGITALE</span>
+              <span class="ios-sublabel">Timer studio live sincronizzato</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-clock-widget" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Testo Scorrevole Marquee -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">TESTO SCORREVOLE</span>
+              <span class="ios-sublabel">Banner LED continuo tipo farmacia</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-marquee" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Spettrogramma Audio Dock -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">SPETTROGRAMMA AUDIO</span>
+              <span class="ios-sublabel">Audiogramma 1/3 inferiore dello schermo</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-spectrogram" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <!-- Dock Unificata Verticale -->
+          <div class="ios-row-item">
+            <div class="ios-row-info">
+              <span class="ios-row-title">DOCK UNIFICATA</span>
+              <span class="ios-sublabel">Card unica verticale trascinabile</span>
+            </div>
+            <label class="toggle-switch">
+              <input id="toggle-unified-stack" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. SCENA 3D GEOMETRICA -->
+        <div class="ios-card-group">
+          <div class="ios-group-header">
+            <span class="ios-group-title">SCENA 3D GEOMETRICA</span>
             <span id="active-scene-name" class="scene-active-tag">01 GEODESIC</span>
           </div>
 
-          <div class="scenes-grid">
-            <button type="button" class="scene-select-btn active" data-scene="0">
-              <span class="scene-num">01</span>
-              <span class="scene-title">GEODESIC</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="1">
-              <span class="scene-num">02</span>
-              <span class="scene-title">TESSERACT</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="2">
-              <span class="scene-num">03</span>
-              <span class="scene-title">WARP</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="3">
-              <span class="scene-num">04</span>
-              <span class="scene-title">SYNCHRO</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="4">
-              <span class="scene-num">05</span>
-              <span class="scene-title">MONOLITH</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="5">
-              <span class="scene-num">06</span>
-              <span class="scene-title">STELLATION</span>
-            </button>
-            <button type="button" class="scene-select-btn" data-scene="6">
-              <span class="scene-num">07</span>
-              <span class="scene-title">CYBER HELIX</span>
-            </button>
+          <!-- Dropdown Scena 3D -->
+          <div class="ios-select-wrapper">
+            <select id="select-scene-dropdown" class="ios-dropdown-select" aria-label="Seleziona Scena 3D">
+              <option value="0">CH 01 // GEODESIC WIREFRAME</option>
+              <option value="1">CH 02 // TESSERACT HYPERCUBE</option>
+              <option value="2">CH 03 // WARP TUNNEL</option>
+              <option value="3">CH 04 // SYNCHRO RAYS</option>
+              <option value="4">CH 05 // MONOLITH FIELD</option>
+              <option value="5">CH 06 // STELLATION DODECAHEDRON</option>
+              <option value="6">CH 07 // CYBER HELIX DNA</option>
+            </select>
+            <span class="ios-select-chevron">▾</span>
           </div>
 
           <!-- Style: Minimal vs Turbo -->
@@ -256,49 +331,145 @@
           </div>
         </div>
 
-        <!-- 2. Atmosphere Palettes (Huge Color Buttons) -->
+        <!-- 3. ATMOSFERA & TEMPLATE (12 Stili: Chiari & Scuri) -->
         <div class="ios-card-group">
           <div class="ios-group-header">
-            <span class="ios-group-title">ATMOSPHERE</span>
-            <span id="active-theme-name" class="scene-active-tag">COBALT</span>
+            <span class="ios-group-title">ATMOSFERA & TEMPLATE</span>
+            <span id="active-theme-name" class="scene-active-tag">SWISS</span>
           </div>
 
-          <div class="palettes-grid">
-            <button type="button" class="theme-chip-btn active" data-theme="0">
+          <!-- Dropdown Temi con OptGroup Chiari / Scuri -->
+          <div class="ios-select-wrapper">
+            <select id="select-theme-dropdown" class="ios-dropdown-select" aria-label="Seleziona Template Atmosfera">
+              <optgroup label="☀️ TEMPLATE CHIARI (LIGHT)">
+                <option value="0">01 SWISS PAPER (Bianco / Rosso)</option>
+                <option value="1">02 NORDIC CERAMIC (Ghiaccio / Blu)</option>
+                <option value="2">03 GALLERY ECRU (Ecrù / Grafite)</option>
+                <option value="3">04 TOKYO MINT (Menta / Smeraldo)</option>
+                <option value="4">05 ALUMINUM (Alluminio / Ocra)</option>
+                <option value="5">06 ARCHITECT CHALK (Gesso / Antracite)</option>
+              </optgroup>
+              <optgroup label="🌙 TEMPLATE SCURI (DARK)">
+                <option value="6">07 COBALT HORIZON (Cobalto / Ciano)</option>
+                <option value="7">08 CAMPARI (Nero / Rosso Campari)</option>
+                <option value="8">09 EMERALD (Nero / Smeraldo)</option>
+                <option value="9">10 ELECTRIC INDIGO (Indaco / Violetto)</option>
+                <option value="10">11 SOLAR TITANIUM (Titanio / Oro)</option>
+                <option value="11">12 ACID OBSIDIAN (Ossidiana / Giallo Acido)</option>
+              </optgroup>
+            </select>
+            <span class="ios-select-chevron">▾</span>
+          </div>
+
+          <!-- Swatch Rapidi Colorati -->
+          <div class="palettes-grid" id="palettes-grid" style="margin-top: 10px;">
+            <button type="button" class="theme-chip-btn active" data-theme="0" title="Swiss Paper">
+              <span class="theme-dot dot-swiss"></span>
+              <span class="theme-label">SWISS</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="1" title="Nordic Ceramic">
+              <span class="theme-dot dot-nordic"></span>
+              <span class="theme-label">NORDIC</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="2" title="Gallery Ecru">
+              <span class="theme-dot dot-gallery"></span>
+              <span class="theme-label">GALLERY</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="3" title="Tokyo Mint">
+              <span class="theme-dot dot-tokyo"></span>
+              <span class="theme-label">TOKYO</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="4" title="Aluminum">
+              <span class="theme-dot dot-aluminum"></span>
+              <span class="theme-label">ALUMINUM</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="5" title="Architect Chalk">
+              <span class="theme-dot dot-architect"></span>
+              <span class="theme-label">CHALK</span>
+            </button>
+            <button type="button" class="theme-chip-btn" data-theme="6" title="Cobalt Horizon">
               <span class="theme-dot dot-cobalt"></span>
-              <span>COBALT</span>
+              <span class="theme-label">COBALT</span>
             </button>
-            <button type="button" class="theme-chip-btn" data-theme="1">
+            <button type="button" class="theme-chip-btn" data-theme="7" title="Campari">
               <span class="theme-dot dot-campari"></span>
-              <span>CAMPARI</span>
+              <span class="theme-label">CAMPARI</span>
             </button>
-            <button type="button" class="theme-chip-btn" data-theme="2">
+            <button type="button" class="theme-chip-btn" data-theme="8" title="Emerald">
               <span class="theme-dot dot-emerald"></span>
-              <span>EMERALD</span>
+              <span class="theme-label">EMERALD</span>
             </button>
-            <button type="button" class="theme-chip-btn" data-theme="3">
+            <button type="button" class="theme-chip-btn" data-theme="9" title="Electric Indigo">
               <span class="theme-dot dot-indigo"></span>
-              <span>INDIGO</span>
+              <span class="theme-label">INDIGO</span>
             </button>
-            <button type="button" class="theme-chip-btn" data-theme="4">
+            <button type="button" class="theme-chip-btn" data-theme="10" title="Solar Titanium">
               <span class="theme-dot dot-solar"></span>
-              <span>SOLAR</span>
+              <span class="theme-label">SOLAR</span>
             </button>
-            <button type="button" class="theme-chip-btn" data-theme="5">
-              <span class="theme-dot dot-paper"></span>
-              <span>PAPER</span>
-            </button>
-            <button type="button" class="theme-chip-btn" data-theme="6">
+            <button type="button" class="theme-chip-btn" data-theme="11" title="Acid Obsidian">
               <span class="theme-dot dot-obsidian"></span>
-              <span>OBSIDIAN</span>
+              <span class="theme-label">OBSIDIAN</span>
             </button>
           </div>
         </div>
 
-        <!-- 3. Studio Audio & Hardware Controls -->
+        <!-- 4. TESTI & DIMENSIONI OVERLAY -->
         <div class="ios-card-group">
           <div class="ios-group-header">
-            <span class="ios-group-title">AUDIO & BROADCAST</span>
+            <span class="ios-group-title">TESTI & DIMENSIONI OVERLAY</span>
+          </div>
+
+          <!-- Dimensione Testo Scorrevole (XL, XXL, XXXXL) -->
+          <div class="ios-row-item-col">
+            <span class="ios-sublabel">DIMENSIONE TESTO SCORREVOLE</span>
+            <div class="ios-select-wrapper">
+              <select id="select-marquee-size-dropdown" class="ios-dropdown-select" aria-label="Dimensione Testo Scorrevole">
+                <option value="xl">XL — 52px (Grande)</option>
+                <option value="xxl" selected>XXL — 70px (Monumentale)</option>
+                <option value="xxxxl">XXXXL — 96px (Gigante Schermo Intero)</option>
+              </select>
+              <span class="ios-select-chevron">▾</span>
+            </div>
+          </div>
+
+          <!-- Colore LED Testo Scorrevole -->
+          <div class="ios-row-item-col" style="margin-top: 10px;">
+            <span class="ios-sublabel">COLORE LED SCORREVOLE</span>
+            <div class="ios-select-wrapper">
+              <select id="select-marquee-color-dropdown" class="ios-dropdown-select" aria-label="Colore LED Scorrevole">
+                <option value="theme" selected>⚡ DINAMICO (Segue il Tema Attivo)</option>
+                <option value="pharmacy">✚ VERDE FARMACIA DIGITALE</option>
+                <option value="amber">● AMBRA CALDO BROADCAST</option>
+                <option value="cyan">◈ CIANO TECNICO HUD</option>
+              </select>
+              <span class="ios-select-chevron">▾</span>
+            </div>
+          </div>
+
+          <!-- Input Testo Scorrevole -->
+          <div class="ios-row-item-col" style="margin-top: 10px;">
+            <span class="ios-sublabel">TESTO SCORREVOLE ("FARMACIA")</span>
+            <textarea id="input-marquee-text" class="form-input form-textarea ios-input" rows="2" placeholder="Testo scorrevole continuo..." maxlength="240">+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++</textarea>
+          </div>
+
+          <!-- Input Titolo Broadcast -->
+          <div class="ios-row-item-col" style="margin-top: 10px;">
+            <span class="ios-sublabel">TITOLO BROADCAST (IN ALTO A SX)</span>
+            <textarea id="input-banner-text" class="form-input form-textarea ios-input" rows="2" placeholder="Titolo broadcast..." maxlength="120">EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES</textarea>
+          </div>
+
+          <!-- Input Destinazione QR Code -->
+          <div class="ios-row-item-col" style="margin-top: 10px;">
+            <span class="ios-sublabel">LINK DESTINAZIONE QR CODE</span>
+            <input id="input-qr-link" class="form-input ios-input" type="url" placeholder="https://..." maxlength="160" value="https://emanuelebdc.com">
+          </div>
+        </div>
+
+        <!-- 5. AUDIO & BROADCAST CONTROLS -->
+        <div class="ios-card-group">
+          <div class="ios-group-header">
+            <span class="ios-group-title">AUDIO & CONTROLLI STUDIO</span>
           </div>
 
           <!-- Huge Microphone Button -->
@@ -307,20 +478,8 @@
             <span id="mic-status-label">MICROPHONE: ACTIVE</span>
           </button>
 
-          <!-- Spectrogram Switch -->
-          <div class="ios-row-item huge-toggle-row">
-            <div>
-              <div class="ios-row-title">SPECTROGRAM</div>
-              <div class="ios-sublabel">Bottom 1/3 audiogram dock</div>
-            </div>
-            <label class="toggle-switch">
-              <input id="toggle-spectrogram" type="checkbox">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-
-          <!-- Fullscreen & Install App Buttons -->
-          <div class="actions-grid">
+          <!-- Fullscreen & Install App -->
+          <div class="actions-grid" style="margin-top: 10px;">
             <button type="button" id="btn-quick-fullscreen" class="huge-action-btn">
               <span>⛶ FULLSCREEN (F)</span>
             </button>
@@ -330,10 +489,10 @@
           </div>
 
           <!-- Auto-Hide HUD Switch -->
-          <div class="ios-row-item huge-toggle-row" style="margin-top: 4px;">
+          <div class="ios-row-item huge-toggle-row" style="margin-top: 10px;">
             <div>
               <div class="ios-row-title">AUTO-HIDE HUD</div>
-              <div class="ios-sublabel">Hide overlay after 3s idle</div>
+              <div class="ios-sublabel">Nascondi controlli dopo 3s di inattività</div>
             </div>
             <label class="toggle-switch">
               <input id="toggle-autohide" type="checkbox" checked>
@@ -342,239 +501,11 @@
           </div>
         </div>
 
-        <!-- 4. Unified HUD Dock (Stack Mode) -->
-        <div class="ios-card-group">
-          <div class="ios-group-header">
-            <span class="ios-group-title">UNIFIED HUD DOCK</span>
-            <label class="toggle-switch">
-              <input id="toggle-unified-stack" type="checkbox">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="ios-group-body" id="group-unified-body">
-            <div class="ios-sublabel" style="line-height: 1.45; color: rgba(255, 255, 255, 0.75);">
-              Dock all active stations (Title, Clock, Media) into a single vertical movable card.
-            </div>
-          </div>
-        </div>
-
-        <!-- 5. Title Card -->
-        <div class="ios-card-group">
-          <div class="ios-group-header">
-            <span class="ios-group-title">TITLE CARD</span>
-            <label class="toggle-switch">
-              <input id="toggle-text-banner" type="checkbox" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="ios-group-body" id="group-text-body">
-            <div class="ios-row-item-col">
-              <span class="ios-sublabel">TEXT SIZE</span>
-              <div class="huge-segmented-control">
-                <button type="button" class="text-size-chip-btn" data-text-size="s">S</button>
-                <button type="button" class="text-size-chip-btn active" data-text-size="m">M</button>
-                <button type="button" class="text-size-chip-btn" data-text-size="l">L</button>
-              </div>
-            </div>
-
-            <textarea id="input-banner-text" class="form-input form-textarea ios-input" rows="2" placeholder="Title..." maxlength="120">EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES</textarea>
-
-            <div class="ios-row-item huge-toggle-row">
-              <div>
-                <div class="ios-row-title">SPEAKER AVATAR</div>
-                <div class="ios-sublabel">Show photo beside title</div>
-              </div>
-              <label class="toggle-switch">
-                <input id="toggle-profile-photo" type="checkbox">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div id="profile-upload-row" class="file-upload-row hidden">
-              <label for="input-profile-file" class="upload-btn ios-upload-btn huge-upload-btn">
-                <span>UPLOAD PHOTO</span>
-              </label>
-              <input id="input-profile-file" type="file" accept="image/*" class="file-input-hidden">
-              <div class="img-preview-box huge-thumb">
-                <img id="profile-preview-thumb" src="assets/ema-portrait.jpg" alt="Preview" />
-              </div>
-            </div>
-            <div id="profile-url-row" class="hidden">
-              <input id="input-profile-url" class="form-input ios-input" type="url" placeholder="https://..." value="assets/ema-portrait.jpg">
-            </div>
-          </div>
-        </div>
-
-        <!-- 6. Geometric Digital Clock Widget -->
-        <div class="ios-card-group">
-          <div class="ios-group-header">
-            <span class="ios-group-title">CLOCK WIDGET</span>
-            <label class="toggle-switch">
-              <input id="toggle-clock-widget" type="checkbox">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="ios-group-body" id="group-clock-body">
-            <div class="ios-row-item huge-toggle-row">
-              <div>
-                <div class="ios-row-title">SHOW SECONDS</div>
-                <div class="ios-sublabel">Live ticking precision</div>
-              </div>
-              <label class="toggle-switch">
-                <input id="toggle-clock-seconds" type="checkbox" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="ios-row-item huge-toggle-row">
-              <div>
-                <div class="ios-row-title">SHOW DATE ROW</div>
-                <div class="ios-sublabel">Calendar date & UTC offset</div>
-              </div>
-              <label class="toggle-switch">
-                <input id="toggle-clock-date" type="checkbox" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- 7. QR Code & Media Station (Independent QR and Image Toggles) -->
-        <div class="ios-card-group">
-          <div class="ios-group-header">
-            <span class="ios-group-title">MEDIA STATION</span>
-            <label class="toggle-switch">
-              <input id="toggle-media-card" type="checkbox" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="ios-group-body" id="group-media-body">
-            <div class="ios-row-item-col">
-              <span class="ios-sublabel">CARD SIZE</span>
-              <div class="huge-segmented-control">
-                <button type="button" class="size-chip-btn" data-media-size="s">S</button>
-                <button type="button" class="size-chip-btn active" data-media-size="m">M</button>
-                <button type="button" class="size-chip-btn" data-media-size="l">L</button>
-              </div>
-            </div>
-
-            <!-- Independent Toggle: QR Code -->
-            <div class="ios-row-item huge-toggle-row" style="margin-top: 6px;">
-              <div>
-                <div class="ios-row-title">QR CODE</div>
-                <div class="ios-sublabel">Interactive scan link</div>
-              </div>
-              <label class="toggle-switch">
-                <input id="toggle-qr-enable" type="checkbox" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div id="media-qr-fields">
-              <input id="input-qr-link" class="form-input ios-input" type="url" placeholder="Destination URL..." maxlength="160" value="https://emanuelebdc.com">
-
-              <div class="ios-row-item huge-toggle-row">
-                <div class="ios-row-title">SHOW CTA BADGE</div>
-                <label class="toggle-switch">
-                  <input id="toggle-qr-cta" type="checkbox">
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-              <div id="qr-cta-input-row" class="hidden" style="margin-top: 6px;">
-                <input id="input-qr-cta" class="form-input ios-input" type="text" placeholder="CTA label..." maxlength="32" value="SCAN TO CONNECT">
-              </div>
-
-              <div class="ios-row-item huge-toggle-row">
-                <div class="ios-row-title">SHOW URL LABEL</div>
-                <label class="toggle-switch">
-                  <input id="toggle-qr-url" type="checkbox">
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-              <div id="qr-url-input-row" class="hidden" style="margin-top: 6px;">
-                <input id="input-qr-display-url" class="form-input ios-input" type="text" placeholder="Display URL..." maxlength="40" value="emanuelebdc.com">
-              </div>
-            </div>
-
-            <!-- Independent Toggle: Second / Custom Image -->
-            <div class="ios-row-item huge-toggle-row" style="margin-top: 10px;">
-              <div>
-                <div class="ios-row-title">CUSTOM IMAGE</div>
-                <div class="ios-sublabel">Show second image or artwork</div>
-              </div>
-              <label class="toggle-switch">
-                <input id="toggle-img-enable" type="checkbox">
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div id="media-img-fields" class="hidden">
-              <div class="file-upload-row">
-                <label for="input-img-file" class="upload-btn ios-upload-btn huge-upload-btn">
-                  <span>UPLOAD IMAGE</span>
-                </label>
-                <input id="input-img-file" type="file" accept="image/*" class="file-input-hidden">
-                <div class="img-preview-box huge-thumb">
-                  <img id="img-preview-thumb" src="assets/ema-portrait.jpg" alt="Preview" />
-                </div>
-              </div>
-              <input id="input-img-url" class="form-input ios-input" style="margin-top: 6px;" type="url" placeholder="https://..." value="assets/ema-portrait.jpg">
-            </div>
-          </div>
-        </div>
-
-        <!-- 8. Digital LED Marquee Ticker ("Farmacia" Style) -->
-        <div class="ios-card-group">
-          <div class="ios-group-header">
-            <span class="ios-group-title">DIGITAL LED MARQUEE</span>
-            <label class="toggle-switch">
-              <input id="toggle-marquee" type="checkbox">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="ios-group-body" id="group-marquee-body">
-            <div class="ios-row-item-col">
-              <span class="ios-sublabel">TICKER TEXT</span>
-              <textarea id="input-marquee-text" class="form-input form-textarea ios-input" rows="2" placeholder="Ticker text..." maxlength="200">+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++</textarea>
-            </div>
-
-            <!-- LED Color Palette -->
-            <div class="ios-row-item-col" style="margin-top: 8px;">
-              <span class="ios-sublabel">LED COLOR</span>
-              <div class="huge-segmented-control" id="marquee-color-control">
-                <button type="button" class="marquee-color-btn active" data-color="pharmacy">✚ GREEN</button>
-                <button type="button" class="marquee-color-btn" data-color="theme">⚡ THEME</button>
-                <button type="button" class="marquee-color-btn" data-color="amber">● AMBER</button>
-                <button type="button" class="marquee-color-btn" data-color="cyan">◈ CYAN</button>
-              </div>
-            </div>
-
-            <!-- Scroll Speed -->
-            <div class="ios-row-item-col" style="margin-top: 8px;">
-              <span class="ios-sublabel">SCROLL SPEED</span>
-              <div class="huge-segmented-control" id="marquee-speed-control">
-                <button type="button" class="marquee-speed-btn" data-speed="slow">SLOW</button>
-                <button type="button" class="marquee-speed-btn active" data-speed="normal">NORMAL</button>
-                <button type="button" class="marquee-speed-btn" data-speed="fast">FAST</button>
-              </div>
-            </div>
-
-            <!-- Screen Position -->
-            <div class="ios-row-item-col" style="margin-top: 8px;">
-              <span class="ios-sublabel">POSITION</span>
-              <div class="huge-segmented-control" id="marquee-pos-control">
-                <button type="button" class="marquee-pos-btn active" data-pos="bottom">BOTTOM</button>
-                <button type="button" class="marquee-pos-btn" data-pos="top">TOP</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Reset Layout Button -->
+      <!-- Reset Button -->
       <button type="button" id="btn-quick-reset" class="huge-reset-btn">
-        <span>↺ RESET LAYOUT</span>
+        <span>↺ RESET IMPOSTAZIONI PREDEFINITE</span>
       </button>
 
       <div class="settings-footer ios-footer">
@@ -584,8 +515,8 @@
     </div>
   </div>
 
-  <script src="qrcode.min.js?v=540"></script>
-  <script src="visuals.js?v=540"></script>
-  <script src="app.js?v=540"></script>
+  <script src="qrcode.min.js?v=560"></script>
+  <script src="visuals.js?v=560"></script>
+  <script src="app.js?v=560"></script>
 </body>
 </html>

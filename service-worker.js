@@ -1,11 +1,11 @@
-const CACHE_NAME = 'audio-visual-react-v540';
+const CACHE_NAME = 'audio-visual-react-v560';
 const ASSETS_TO_CACHE = [
   './',
-  './index.html?v=540',
-  './style.css?v=540',
-  './app.js?v=540',
-  './visuals.js?v=540',
-  './qrcode.min.js?v=540',
+  './index.html?v=560',
+  './style.css?v=560',
+  './app.js?v=560',
+  './visuals.js?v=560',
+  './qrcode.min.js?v=560',
   './manifest.webmanifest',
   './assets/ema-portrait.jpg',
   './assets/icon-192.png',

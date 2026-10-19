@@ -22,53 +22,12 @@ class VisualEngine {
     this.themeIndex = 0;
 
     // 7 Curated Atmospheric Palettes with Rich Non-Black Backgrounds (emaf205 Art Direction)
+    // 12 Curated Atmosphere Templates (6 Light Architectures & 6 Dark Nocturnes)
     this.themes = [
+      // --- LIGHT & EDITORIAL TEMPLATES ---
       {
-        name: 'COBALT HORIZON',
-        primary: '#E2F1FF',      // Luminous Ice White
-        secondary: '#00D4FF',    // Electric Cyan
-        accent: '#64B5F6',       // Deep Sky Blue
-        glow: 'rgba(0, 212, 255, 0.40)',
-        bgTop: '#10223b',        // Deep Architectural Cobalt
-        bgBottom: '#050d18'
-      },
-      {
-        name: 'CAMPARI NOCTURNE',
-        primary: '#FFF0F3',      // Soft Quartz
-        secondary: '#FF0055',    // Intense Campari Magenta
-        accent: '#FFA8B6',       // Rose Blush
-        glow: 'rgba(255, 0, 85, 0.42)',
-        bgTop: '#2e040c',        // Deep Burgundy Atmosphere
-        bgBottom: '#100104'
-      },
-      {
-        name: 'EMERALD SANCTUARY',
-        primary: '#E8FFF5',      // Mint Optic White
-        secondary: '#00FF9D',    // Neon Emerald
-        accent: '#80E5B8',       // Seafoam Cyan
-        glow: 'rgba(0, 255, 157, 0.40)',
-        bgTop: '#06261a',        // Nordic Deep Pine
-        bgBottom: '#010f0a'
-      },
-      {
-        name: 'ELECTRIC INDIGO',
-        primary: '#F5E8FF',      // Star White
-        secondary: '#B829FF',    // Ultraviolet
-        accent: '#00F5FF',       // Laser Cyan
-        glow: 'rgba(184, 41, 255, 0.42)',
-        bgTop: '#1e0c38',        // Cosmic Violet
-        bgBottom: '#090314'
-      },
-      {
-        name: 'SOLAR TITANIUM',
-        primary: '#FFF8E7',      // Warm Cream White
-        secondary: '#FF9100',    // Hyper Solar Amber
-        accent: '#FFD166',       // Radiant Gold
-        glow: 'rgba(255, 145, 0, 0.42)',
-        bgTop: '#2c1505',        // Roasted Mocha
-        bgBottom: '#0d0500'
-      },
-      {
+        id: 'swiss-paper',
+        category: 'light',
         name: 'SWISS PAPER WHITE',
         isLight: true,
         primary: '#0A0A0A',      // Architectural Indian Ink
@@ -79,12 +38,131 @@ class VisualEngine {
         bgBottom: '#E8E4DA'
       },
       {
+        id: 'nordic-ceramic',
+        category: 'light',
+        name: 'NORDIC CERAMIC',
+        isLight: true,
+        primary: '#111827',      // Deep Slate Ink
+        secondary: '#0099B8',    // Nordic Frost Cyan
+        accent: '#2563EB',       // Modern Royal Blue
+        glow: 'rgba(0, 153, 184, 0.18)',
+        bgTop: '#FFFFFF',        // Pure Glazed Ceramic
+        bgBottom: '#EBF2F7'      // Crisp Pale Sky
+      },
+      {
+        id: 'gallery-ecru',
+        category: 'light',
+        name: 'GALLERY ECRU',
+        isLight: true,
+        primary: '#1C1917',      // Rich Espresso
+        secondary: '#C2410C',    // Terracotta Ochre
+        accent: '#854D0E',       // Sienna Bronze
+        glow: 'rgba(194, 65, 12, 0.15)',
+        bgTop: '#FAF6F0',        // Warm Linen
+        bgBottom: '#ECE4D6'      // Gallery Ecru
+      },
+      {
+        id: 'tokyo-mint',
+        category: 'light',
+        name: 'TOKYO DAY MINT',
+        isLight: true,
+        primary: '#06281E',      // Deep Pine Charcoal
+        secondary: '#059669',    // High-Contrast Emerald
+        accent: '#0D9488',       // Crisp Verdigris
+        glow: 'rgba(5, 150, 105, 0.18)',
+        bgTop: '#F0FDF8',        // Pale Frosted Mint
+        bgBottom: '#D8F3E5'      // Seafoam Pearl
+      },
+      {
+        id: 'aluminum-studio',
+        category: 'light',
+        name: 'ALUMINUM INDUSTRIAL',
+        isLight: true,
+        primary: '#18181B',      // Anodized Carbon
+        secondary: '#EA580C',    // Signal Neon Orange
+        accent: '#4B5563',       // Technical Steel
+        glow: 'rgba(234, 88, 12, 0.16)',
+        bgTop: '#F3F4F6',        // Milled Aluminum
+        bgBottom: '#E1E4EA'      // Platinum Metal
+      },
+      {
+        id: 'architect-chalk',
+        category: 'light',
+        name: 'ARCHITECT CHALK',
+        isLight: true,
+        primary: '#0F172A',      // Blueprint Navy Ink
+        secondary: '#0284C7',    // Electric Drafting Cyan
+        accent: '#D97706',       // Amber Pencil Lead
+        glow: 'rgba(2, 132, 199, 0.16)',
+        bgTop: '#F8FAFC',        // Drafting Parchment
+        bgBottom: '#E2E8F0'      // Cool Drafting Vellum
+      },
+
+      // --- DARK & NOCTURNE TEMPLATES ---
+      {
+        id: 'cobalt-horizon',
+        category: 'dark',
+        name: 'COBALT HORIZON',
+        primary: '#E2F1FF',      // Luminous Ice White
+        secondary: '#00D4FF',    // Electric Cyan
+        accent: '#64B5F6',       // Deep Sky Blue
+        glow: 'rgba(0, 212, 255, 0.40)',
+        bgTop: '#10223B',        // Deep Architectural Cobalt
+        bgBottom: '#050D18'
+      },
+      {
+        id: 'campari-nocturne',
+        category: 'dark',
+        name: 'CAMPARI NOCTURNE',
+        primary: '#FFF0F3',      // Soft Quartz
+        secondary: '#FF0055',    // Intense Campari Magenta
+        accent: '#FFA8B6',       // Rose Blush
+        glow: 'rgba(255, 0, 85, 0.42)',
+        bgTop: '#2E040C',        // Deep Burgundy Atmosphere
+        bgBottom: '#100104'
+      },
+      {
+        id: 'emerald-sanctuary',
+        category: 'dark',
+        name: 'EMERALD SANCTUARY',
+        primary: '#E8FFF5',      // Mint Optic White
+        secondary: '#00FF9D',    // Neon Emerald
+        accent: '#80E5B8',       // Seafoam Cyan
+        glow: 'rgba(0, 255, 157, 0.40)',
+        bgTop: '#06261A',        // Nordic Deep Pine
+        bgBottom: '#010F0A'
+      },
+      {
+        id: 'electric-indigo',
+        category: 'dark',
+        name: 'ELECTRIC INDIGO',
+        primary: '#F5E8FF',      // Star White
+        secondary: '#B829FF',    // Ultraviolet
+        accent: '#00F5FF',       // Laser Cyan
+        glow: 'rgba(184, 41, 255, 0.42)',
+        bgTop: '#1E0C38',        // Cosmic Violet
+        bgBottom: '#090314'
+      },
+      {
+        id: 'solar-titanium',
+        category: 'dark',
+        name: 'SOLAR TITANIUM',
+        primary: '#FFF8E7',      // Warm Cream White
+        secondary: '#FF9100',    // Hyper Solar Amber
+        accent: '#FFD166',       // Radiant Gold
+        glow: 'rgba(255, 145, 0, 0.42)',
+        bgTop: '#2C1505',        // Roasted Mocha
+        bgBottom: '#0D0500'
+      },
+      {
+        id: 'acid-obsidian',
+        category: 'dark',
         name: 'ACID OBSIDIAN',
         primary: '#CCFF00',      // Acid Lime
         secondary: '#FFFFFF',    // Optic White
         accent: '#00FF88',       // Neon Mint
         glow: 'rgba(204, 255, 0, 0.42)',
-        bgTop: '#0c120c',        // Deep Forest Slate
+        bgTop: '#0C120C',        // Deep Forest Slate
         bgBottom: '#020502'
       }
     ];
@@ -614,7 +692,7 @@ class VisualEngine {
         const progress = ((this.time * 1.8 + i * 0.15) % 1.0);
         const strutPx = ip.px + (op.px - ip.px) * progress;
         const strutPy = ip.py + (op.py - ip.py) * progress;
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
         ctx.globalAlpha = 0.85;
         ctx.beginPath();
         ctx.arc(strutPx, strutPy, 1.4, 0, Math.PI * 2);
@@ -704,7 +782,7 @@ class VisualEngine {
     // --- 7. GLOWING QUANTUM NODES ON VERTICES ---
     for (const p of projected2D) {
       if (p.depth > -0.2) {
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
         ctx.globalAlpha = Math.min(1.0, 0.55 + (p.depth + 1) * 0.25 + p.amp * 0.45);
         ctx.beginPath();
         ctx.arc(p.px, p.py, 2.6 + p.amp * 3.8, 0, Math.PI * 2);
@@ -771,7 +849,7 @@ class VisualEngine {
       for (let i = 0; i < ringPts.length; i += tickStep) {
         const pt = ringPts[i];
         if (pt.zFinal > -60) {
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
           ctx.globalAlpha = Math.min(1.0, 0.45 + (pt.zFinal / r + 1) * 0.4);
           const isMajor = i % (tickStep * 2) === 0;
           const tickSize = isMajor ? (2.8 + this.smoothMid * 2.2) : 1.6;
@@ -785,7 +863,7 @@ class VisualEngine {
       const satIdx = Math.floor(((this.time * speedMult * 12) % ringPts.length) + ringPts.length) % ringPts.length;
       const sat = ringPts[satIdx];
       if (sat && sat.zFinal > -80) {
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
         ctx.shadowColor = theme.secondary;
         ctx.shadowBlur = 10;
         ctx.globalAlpha = 0.95;
@@ -839,7 +917,7 @@ class VisualEngine {
 
       if (zFinal > -120) {
         const pAlpha = Math.min(1.0, 0.35 + (zFinal / pr + 1) * 0.45);
-        ctx.fillStyle = p.colorIndex === 0 ? '#FFFFFF' : (p.colorIndex === 1 ? theme.primary : theme.secondary);
+        ctx.fillStyle = p.colorIndex === 0 ? (theme.isLight ? '#000000' : '#FFFFFF') : (p.colorIndex === 1 ? theme.primary : theme.secondary);
         ctx.globalAlpha = pAlpha;
         const pSize = p.size * (0.8 + this.smoothHigh * 0.8) * scale * 1.6;
         ctx.beginPath();
@@ -1011,7 +1089,7 @@ class VisualEngine {
 
     // 4. Render Glowing Diamond Vertices
     for (const p of projected2D) {
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
       ctx.globalAlpha = 0.95;
       const size = 3.2 + this.smoothHigh * 4.0;
       // Diamond shape
@@ -1085,7 +1163,7 @@ class VisualEngine {
         const dirX = (px - cx) * 0.06;
         const dirY = (py - cy) * 0.06;
 
-        ctx.strokeStyle = star.speedFactor > 1.2 ? theme.secondary : '#FFFFFF';
+        ctx.strokeStyle = star.speedFactor > 1.2 ? theme.secondary : (theme.isLight ? '#0A0A0A' : '#FFFFFF');
         ctx.lineWidth = Math.max(1.0, star.size * zScale * 1.8);
         ctx.globalAlpha = alpha;
 
@@ -1096,7 +1174,7 @@ class VisualEngine {
 
         // Tip diamond spark
         if (normZ < 0.6) {
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = theme.isLight ? '#0A0A0A' : '#FFFFFF';
           ctx.globalAlpha = Math.min(1.0, alpha * 1.2);
           const dSize = star.size * zScale * 1.8;
           ctx.beginPath();
@@ -1282,7 +1360,7 @@ class VisualEngine {
       if ((isBulk || r % 2 === 0) && normZ < 0.8) {
         for (let s = 0; s < sides; s++) {
           const pt = ring.pts[s];
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
           ctx.globalAlpha = Math.min(1.0, alpha * 1.3);
           const vSize = Math.max(1.6, 3.8 * (1.0 - normZ * 0.6) + this.smoothHigh * 2.2);
           ctx.beginPath();
@@ -1384,7 +1462,7 @@ class VisualEngine {
     }
 
     // Vanishing Point Quantum Diamond
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
     ctx.globalAlpha = 0.95;
     const centerDiamond = 4.2 + this.smoothHigh * 4.5;
     ctx.beginPath();
@@ -1704,7 +1782,7 @@ class VisualEngine {
       ctx.lineTo(basePt.px, basePt.py - pylonH);
       ctx.stroke();
 
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
       ctx.beginPath();
       ctx.arc(basePt.px, basePt.py - pylonH, 2.5 * basePt.scale, 0, Math.PI * 2);
       ctx.fill();
@@ -2393,7 +2471,7 @@ class VisualEngine {
         if (isActive) {
           const midX = (ptA.px + ptB.px) * 0.5;
           const midY = (ptA.py + ptB.py) * 0.5;
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
           ctx.beginPath();
           ctx.arc(midX, midY, 2.5 * ptA.scale, 0, Math.PI * 2);
           ctx.fill();

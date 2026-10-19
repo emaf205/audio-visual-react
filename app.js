@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleMarquee = document.getElementById('toggle-marquee');
   const inputMarqueeText = document.getElementById('input-marquee-text');
   const marqueeColorBtns = document.querySelectorAll('.marquee-color-btn[data-color]');
+  const marqueeSizeBtns = document.querySelectorAll('.marquee-size-btn[data-size]');
   const marqueeSpeedBtns = document.querySelectorAll('.marquee-speed-btn[data-speed]');
   const marqueePosBtns = document.querySelectorAll('.marquee-pos-btn[data-pos]');
 
@@ -145,11 +146,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const settingsDrawer = document.getElementById('settings-drawer');
   const settingsCloseBtn = document.getElementById('settings-close-btn');
 
+  // Master Actions & Active Counter
+  const btnLoadDemo = document.getElementById('btn-load-demo');
+  const btnClearAll = document.getElementById('btn-clear-all');
+  const activeOverlaysCount = document.getElementById('active-overlays-count');
+
   // Scene & Atmosphere Elements
   const activeSceneName = document.getElementById('active-scene-name');
   const activeThemeName = document.getElementById('active-theme-name');
+  const selectSceneDropdown = document.getElementById('select-scene-dropdown');
+  const selectThemeDropdown = document.getElementById('select-theme-dropdown');
+  const selectMarqueeSizeDropdown = document.getElementById('select-marquee-size-dropdown');
+  const selectMarqueeColorDropdown = document.getElementById('select-marquee-color-dropdown');
   const sceneSelectBtns = document.querySelectorAll('.scene-select-btn[data-scene]');
   const themeChipBtns = document.querySelectorAll('.theme-chip-btn[data-theme]');
+  const templateTabBtns = document.querySelectorAll('.template-tab-btn[data-filter]');
   const btnToggleAutorotate = document.getElementById('btn-toggle-autorotate');
   const sceneModeIndicator = document.getElementById('scene-mode-indicator');
   const autorotateBtnLabel = document.getElementById('autorotate-btn-label');
@@ -180,8 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_QR_URL = "https://emanuelebdc.com";
   const DEFAULT_AVATAR = "assets/ema-portrait.jpg";
 
-  // App State — Title
-  let isTextVisible = true;
+  // App State — Overlays (Default FALSE for pristine studio canvas)
+  let isTextVisible = localStorage.getItem('broadcast_show_text') === 'true';
   let currentTextSize = localStorage.getItem('broadcast_text_size') || 'm';
   let isProfileVisible = localStorage.getItem('broadcast_show_profile') === 'true';
   let profileAvatarSrc = localStorage.getItem('broadcast_profile_img') || DEFAULT_AVATAR;
@@ -195,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isUnifiedStack = localStorage.getItem('broadcast_unified_stack') === 'true';
 
   // App State — Media Station (Independent QR + Custom Image)
-  let isMediaVisible = true;
+  let isMediaVisible = localStorage.getItem('broadcast_show_media') === 'true';
   let isQrEnabled = localStorage.getItem('broadcast_show_qr') !== 'false';
   let isImgEnabled = localStorage.getItem('broadcast_show_img') === 'true';
   let currentMediaSize = localStorage.getItem('broadcast_media_size') || 'm';
@@ -209,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_MARQUEE_TEXT = "+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++";
   let isMarqueeVisible = localStorage.getItem('broadcast_show_marquee') === 'true';
   let marqueeText = localStorage.getItem('broadcast_marquee_text') || DEFAULT_MARQUEE_TEXT;
-  let marqueeColor = localStorage.getItem('broadcast_marquee_color') || 'pharmacy';
+  let marqueeColor = localStorage.getItem('broadcast_marquee_color') || 'theme';
+  let marqueeSize = localStorage.getItem('broadcast_marquee_size') || 'xxl';
   let marqueeSpeed = localStorage.getItem('broadcast_marquee_speed') || 'normal';
   let marqueePos = localStorage.getItem('broadcast_marquee_pos') || 'bottom';
 
@@ -236,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isSpeaking: false
   };
 
-  // --- Resilient Storage Setter (prevents QuotaExceededError crashes) ---
+  // --- Resilient Storage Setter & Getter (prevents QuotaExceededError crashes) ---
   function safeStorageSet(key, val) {
     try {
       localStorage.setItem(key, String(val));
@@ -247,6 +259,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   window.safeStorageSet = safeStorageSet;
+
+  function safeStorageGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (_) {
+      return null;
+    }
+  }
+  window.safeStorageGet = safeStorageGet;
+
+  // --- 0. ACTIVE OVERLAYS COUNTER & MASTER ACTIONS ---
+  function updateOverlaysCountBadge() {
+    if (!activeOverlaysCount) return;
+    let count = 0;
+    if (isTextVisible) count++;
+    if (isMediaVisible) count++;
+    if (isClockVisible) count++;
+    if (isMarqueeVisible) count++;
+    if (isSpectrogramVisible) count++;
+    if (isUnifiedStack) count++;
+
+    activeOverlaysCount.textContent = count === 1 ? '1 ATTIVO' : `${count} ATTIVI`;
+    activeOverlaysCount.classList.toggle('active', count > 0);
+  }
+  window.updateOverlaysCountBadge = updateOverlaysCountBadge;
+
+  function loadDemoSetup() {
+    setTextVisible(true);
+    setMediaVisible(true);
+    setClockVisible(true);
+    setMarqueeVisible(true);
+    setSpectrogramVisible(false);
+    setUnifiedStack(false);
+    updateOverlaysCountBadge();
+    showToast('⚡ DEMO CARICATA: WIDGET ATTIVI', 2500);
+  }
+  window.loadDemoSetup = loadDemoSetup;
+
+  function resetToCleanSlate() {
+    setTextVisible(false);
+    setMediaVisible(false);
+    setClockVisible(false);
+    setMarqueeVisible(false);
+    setSpectrogramVisible(false);
+    setUnifiedStack(false);
+    updateOverlaysCountBadge();
+    showToast('↺ SCHERMO PULITO: SOLO VISUALIZZAZIONI 3D', 2500);
+  }
+  window.resetToCleanSlate = resetToCleanSlate;
+
+  if (btnLoadDemo) {
+    btnLoadDemo.addEventListener('click', (e) => {
+      e.preventDefault();
+      loadDemoSetup();
+    });
+  }
+
+  if (btnClearAll) {
+    btnClearAll.addEventListener('click', (e) => {
+      e.preventDefault();
+      resetToCleanSlate();
+    });
+  }
 
   // --- 1. TOAST NOTIFICATION ---
   function showToast(text, durationMs = 2000) {
@@ -261,6 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 2. TITLE CARD & PROFILE PHOTO ---
+  function setTextVisible(visible, updateStorage = true) {
+    isTextVisible = !!visible;
+    if (updateStorage) safeStorageSet('broadcast_show_text', isTextVisible.toString());
+    if (toggleTextBanner) toggleTextBanner.checked = isTextVisible;
+    if (textBanner) textBanner.classList.toggle('hidden', !isTextVisible);
+    if (groupTextBody) groupTextBody.style.display = isTextVisible ? 'flex' : 'none';
+    updateOverlaysCountBadge();
+  }
+  window.setTextVisible = setTextVisible;
+
   function setTextSize(size, updateStorage = true) {
     size = (size || 'm').toLowerCase();
     if (!['s', 'm', 'l'].includes(size)) size = 'm';
@@ -316,10 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (toggleTextBanner) {
     toggleTextBanner.addEventListener('change', (e) => {
-      isTextVisible = e.target.checked;
-      safeStorageSet('broadcast_show_text', isTextVisible.toString());
-      if (textBanner) textBanner.classList.toggle('hidden', !isTextVisible);
-      if (groupTextBody) groupTextBody.style.display = isTextVisible ? 'flex' : 'none';
+      setTextVisible(e.target.checked);
       showToast(isTextVisible ? 'TITLE: ON' : 'TITLE: OFF');
     });
   }
@@ -512,12 +594,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (inputQrDisplayUrl) inputQrDisplayUrl.addEventListener('input', renderMediaContent);
 
+  function setMediaVisible(visible, updateStorage = true) {
+    isMediaVisible = !!visible;
+    if (updateStorage) safeStorageSet('broadcast_show_media', isMediaVisible.toString());
+    if (toggleMediaCard) toggleMediaCard.checked = isMediaVisible;
+    if (groupMediaBody) groupMediaBody.style.display = isMediaVisible ? 'flex' : 'none';
+    renderMediaContent();
+    updateOverlaysCountBadge();
+  }
+  window.setMediaVisible = setMediaVisible;
+
   if (toggleMediaCard) {
     toggleMediaCard.addEventListener('change', (e) => {
-      isMediaVisible = e.target.checked;
-      safeStorageSet('broadcast_show_media', isMediaVisible.toString());
-      if (groupMediaBody) groupMediaBody.style.display = isMediaVisible ? 'flex' : 'none';
-      renderMediaContent();
+      setMediaVisible(e.target.checked);
       showToast(isMediaVisible ? 'MEDIA: ON' : 'MEDIA: OFF');
     });
   }
@@ -594,8 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clockWidget) clockWidget.classList.toggle('hidden', !isClockVisible);
     if (groupClockBody) groupClockBody.style.display = isClockVisible ? 'flex' : 'none';
     if (isClockVisible) updateClock();
-    showToast(isClockVisible ? 'CLOCK: ON' : 'CLOCK: OFF');
+    updateOverlaysCountBadge();
+    if (updateStorage) showToast(isClockVisible ? 'CLOCK: ON' : 'CLOCK: OFF');
   }
+  window.setClockVisible = setClockVisible;
 
   if (toggleClockWidget) {
     toggleClockWidget.addEventListener('change', (e) => setClockVisible(e.target.checked));
@@ -650,7 +741,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (unifiedCard) unifiedCard.classList.add('hidden');
       if (updateStorage) showToast('UNIFIED DOCK: OFF');
     }
+    updateOverlaysCountBadge();
   }
+  window.setUnifiedStack = setUnifiedStack;
 
   if (toggleUnifiedStack) {
     toggleUnifiedStack.addEventListener('change', (e) => setUnifiedStack(e.target.checked));
@@ -715,13 +808,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.toggle('has-spectrogram', isSpectrogramVisible);
   }
 
+  function setSpectrogramVisible(visible, updateStorage = true) {
+    isSpectrogramVisible = !!visible;
+    if (updateStorage) safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
+    if (toggleSpectrogram) toggleSpectrogram.checked = isSpectrogramVisible;
+    updateSpectrogram();
+    updateOverlaysCountBadge();
+    if (updateStorage) showToast(isSpectrogramVisible ? 'SPETTROGRAMMA: ON' : 'SPETTROGRAMMA: OFF');
+  }
+  window.setSpectrogramVisible = setSpectrogramVisible;
+
   if (toggleSpectrogram) {
-    toggleSpectrogram.addEventListener('change', (e) => {
-      isSpectrogramVisible = e.target.checked;
-      safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
-      updateSpectrogram();
-      showToast(isSpectrogramVisible ? 'SPECTROGRAM: ON' : 'SPECTROGRAM: OFF');
-    });
+    toggleSpectrogram.addEventListener('change', (e) => setSpectrogramVisible(e.target.checked));
   }
 
   // --- 4B. DIGITAL LED MARQUEE TICKER ("Farmacia" Style) ---
@@ -749,6 +847,21 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.toggle('active', btn.dataset.color === marqueeColor);
       });
     }
+    if (selectMarqueeColorDropdown) {
+      selectMarqueeColorDropdown.value = marqueeColor;
+    }
+
+    // Size Class (XL, XXL, XXXXL)
+    ['size-xl', 'size-xxl', 'size-xxxxl'].forEach(s => marqueeTicker.classList.remove(s));
+    marqueeTicker.classList.add(`size-${marqueeSize}`);
+    if (marqueeSizeBtns) {
+      marqueeSizeBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.size === marqueeSize);
+      });
+    }
+    if (selectMarqueeSizeDropdown) {
+      selectMarqueeSizeDropdown.value = marqueeSize;
+    }
 
     // Speed Class
     ['speed-slow', 'speed-normal', 'speed-fast'].forEach(s => marqueeTicker.classList.remove(s));
@@ -773,15 +886,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function setMarqueeVisible(visible) {
-    isMarqueeVisible = visible;
-    safeStorageSet('broadcast_show_marquee', visible.toString());
+  function setMarqueeVisible(visible, updateStorage = true) {
+    isMarqueeVisible = !!visible;
+    if (updateStorage) safeStorageSet('broadcast_show_marquee', isMarqueeVisible.toString());
+    if (toggleMarquee) toggleMarquee.checked = isMarqueeVisible;
     updateMarqueeUI();
-    showToast(visible ? 'MARQUEE TICKER: ON' : 'MARQUEE TICKER: OFF');
+    updateOverlaysCountBadge();
+    if (updateStorage) showToast(visible ? 'TESTO SCORREVOLE: ON' : 'TESTO SCORREVOLE: OFF');
   }
+  window.setMarqueeVisible = setMarqueeVisible;
 
   if (toggleMarquee) {
     toggleMarquee.addEventListener('change', (e) => setMarqueeVisible(e.target.checked));
+  }
+
+  // Dropdown listeners for Marquee Size & Color
+  if (selectMarqueeSizeDropdown) {
+    selectMarqueeSizeDropdown.addEventListener('change', (e) => {
+      marqueeSize = e.target.value;
+      safeStorageSet('broadcast_marquee_size', marqueeSize);
+      updateMarqueeUI();
+      showToast(`DIMENSIONE: ${marqueeSize.toUpperCase()}`);
+    });
+  }
+
+  if (selectMarqueeColorDropdown) {
+    selectMarqueeColorDropdown.addEventListener('change', (e) => {
+      marqueeColor = e.target.value;
+      safeStorageSet('broadcast_marquee_color', marqueeColor);
+      updateMarqueeUI();
+      showToast(`COLORE: ${marqueeColor.toUpperCase()}`);
+    });
   }
 
   if (inputMarqueeText) {
@@ -801,6 +936,17 @@ document.addEventListener('DOMContentLoaded', () => {
         safeStorageSet('broadcast_marquee_color', marqueeColor);
         updateMarqueeUI();
         showToast(`MARQUEE: ${marqueeColor.toUpperCase()}`);
+      });
+    });
+  }
+
+  if (marqueeSizeBtns) {
+    marqueeSizeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        marqueeSize = btn.dataset.size;
+        safeStorageSet('broadcast_marquee_size', marqueeSize);
+        updateMarqueeUI();
+        showToast(`DIMENSIONE: ${marqueeSize.toUpperCase()}`);
       });
     });
   }
@@ -949,6 +1095,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.toggle('active', idx === engine.currentScene);
       });
     }
+    if (selectSceneDropdown) {
+      selectSceneDropdown.value = engine.currentScene.toString();
+    }
 
     if (pillChBadge) {
       pillChBadge.textContent = String(engine.currentScene + 1).padStart(2, '0');
@@ -1071,6 +1220,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dropdown Scene Selector
+  if (selectSceneDropdown) {
+    selectSceneDropdown.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.value, 10);
+      const sc = engine.setScene(idx);
+      stopAutoRotation();
+      updateSceneUI(sc, false);
+      showToast(`SCENA: ${sc.name.replace(/^CH \d+ \/\/ /, '')}`);
+    });
+  }
+
   if (btnToggleAutorotate) {
     btnToggleAutorotate.addEventListener('click', () => {
       if (isAutoRotating) {
@@ -1102,22 +1262,41 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.toggle('theme-light', !!theme.isLight);
     if (activeThemeName) activeThemeName.textContent = theme.name.split(' ')[0];
     if (themeChipBtns) {
-      themeChipBtns.forEach((btn, idx) => {
-        btn.classList.toggle('active', idx === engine.themeIndex);
+      themeChipBtns.forEach((btn) => {
+        const btnIdx = parseInt(btn.getAttribute('data-theme'), 10);
+        btn.classList.toggle('active', btnIdx === engine.themeIndex);
       });
     }
+    if (selectThemeDropdown) {
+      selectThemeDropdown.value = engine.themeIndex.toString();
+    }
 
-    // Dynamic Clock & Visualizer Color Binding
+    // Dynamic Clock, Marquee & Visualizer Color Binding
     const clockAccent = theme.secondary || theme.accent || '#00D4FF';
     const clockGlow = theme.glow || 'rgba(0, 212, 255, 0.4)';
-    const clockPrimary = theme.primary || '#ffffff';
+    const clockPrimary = theme.primary || (theme.isLight ? '#0A0A0A' : '#ffffff');
+    const themeSecondary = theme.secondary || '#00D4FF';
     document.documentElement.style.setProperty('--clock-accent', clockAccent);
     document.documentElement.style.setProperty('--clock-glow', clockGlow);
     document.documentElement.style.setProperty('--clock-primary', clockPrimary);
+    document.documentElement.style.setProperty('--theme-accent', clockAccent);
+    document.documentElement.style.setProperty('--theme-glow', clockGlow);
+    document.documentElement.style.setProperty('--theme-primary', clockPrimary);
+    document.documentElement.style.setProperty('--theme-secondary', themeSecondary);
 
+    safeStorageSet('broadcast_theme_index', engine.themeIndex.toString());
     showToast(`THEME: ${theme.name}`);
   }
   window.applyTheme = applyTheme;
+
+  // Dropdown Theme Selector
+  if (selectThemeDropdown) {
+    selectThemeDropdown.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.value, 10);
+      engine.themeIndex = idx;
+      applyTheme(engine.theme);
+    });
+  }
 
   if (themeChipBtns) {
     themeChipBtns.forEach((btn) => {
@@ -1125,6 +1304,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const idx = parseInt(btn.getAttribute('data-theme'), 10);
         engine.themeIndex = idx;
         applyTheme(engine.theme);
+      });
+    });
+  }
+
+  // Template Category Filter Tabs (All / Light / Dark)
+  if (templateTabBtns) {
+    templateTabBtns.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        templateTabBtns.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.getAttribute('data-filter');
+        themeChipBtns.forEach((btn) => {
+          const category = btn.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            btn.classList.remove('is-filtered-out');
+          } else {
+            btn.classList.add('is-filtered-out');
+          }
+        });
       });
     });
   }
@@ -1146,11 +1344,13 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('broadcast_show_marquee');
       localStorage.removeItem('broadcast_marquee_text');
       localStorage.removeItem('broadcast_marquee_color');
+      localStorage.removeItem('broadcast_marquee_size');
       localStorage.removeItem('broadcast_marquee_speed');
       localStorage.removeItem('broadcast_marquee_pos');
       isMarqueeVisible = false;
       marqueeText = DEFAULT_MARQUEE_TEXT;
-      marqueeColor = 'pharmacy';
+      marqueeColor = 'theme';
+      marqueeSize = 'xxl';
       marqueeSpeed = 'normal';
       marqueePos = 'bottom';
       updateMarqueeUI();
@@ -1542,10 +1742,27 @@ document.addEventListener('DOMContentLoaded', () => {
   setUnifiedStack(isUnifiedStack, false);
   updateSpectrogram();
   updateMarqueeUI();
+  updateOverlaysCountBadge();
   resetIdle();
 
-  // Initial random atmosphere and scene
+  if (btnQuickReset) {
+    btnQuickReset.addEventListener('click', () => {
+      resetToCleanSlate();
+      setMotionStyle('turbo');
+      startAutoRotation();
+      showToast('↺ IMPOSTAZIONI RIPRISTINATE');
+    });
+  }
+
+  // Initial atmosphere and scene
   engine.randomize();
+  const savedThemeIdx = safeStorageGet('broadcast_theme_index');
+  if (savedThemeIdx !== null && !isNaN(parseInt(savedThemeIdx, 10))) {
+    const sIdx = parseInt(savedThemeIdx, 10);
+    if (sIdx >= 0 && sIdx < engine.themes.length) {
+      engine.themeIndex = sIdx;
+    }
+  }
   applyTheme(engine.theme);
   updateSceneUI(engine.currentSceneInfo, false);
   startAutoRotation();

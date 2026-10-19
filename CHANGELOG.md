@@ -5,6 +5,18 @@ All notable changes to **Audio Visual React** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] - 2026-10-19
+### Added
+- **Default Clean Canvas on Launch**: Starts with zero overlays on initial boot—only the pure 60 FPS 3D geometric animation is visible, maximizing aesthetic impact and zero visual clutter.
+- **Master Action Bar**: Instant 1-tap `⚡ LOAD DEMO` (turns on Title, QR & Media, Digital Clock, and LED Marquee ticker simultaneously) and `↺ RESET SCHERMO` (wipes all overlays back to clean canvas in 1 tap).
+- **Streamlined iOS Grouped Settings**: Radically simplified settings drawer inspired by native Apple iOS settings:
+  - Single **COSA MOSTRARE SULLO SCHERMO** master section with 6 switch toggles and live active badge counter (`0 ATTIVI` to `6 ATTIVI`).
+  - High-performance **iOS Dropdown Menus** (`<select class="ios-dropdown-select">`) for 3D Scenes (CH 01 to CH 07) and Atmosphere Templates (with Light / Dark optgroups).
+  - Dedicated **Testi & Dimensioni Overlay** section with dropdowns for Monumental text sizes (XL, XXL, XXXXL) and LED colors (Theme Reactive, Pharmacy Green, Amber, Cyan).
+- **Monumental LED Marquee Sizes (XL 52px, XXL 70px, XXXXL 96px)**: Responsive monumental ticker tape with adaptive speed and full theme color reactivity across both dark and light atmosphere templates.
+- **12 Curated Atmosphere Templates (6 Light & 6 Dark)**: 6 architectural light modes (Swiss Paper, Nordic Ceramic, Gallery Ecru, Tokyo Mint, Aluminum, Architect Chalk) and 6 nocturnes (Cobalt, Campari, Emerald, Electric Indigo, Solar Titanium, Acid Obsidian) with adaptive canvas pip/vertex contrast.
+- **Service Worker Cache-Busting v560**: Upgraded PWA cache to `audio-visual-react-v560` ensuring immediate asset delivery.
+
 ## [5.4.0] - 2026-10-19
 ### Added
 - **CH 06 // 3D POLYHEDRAL STELLATION**: Realistic Kepler-Poinsot icosahedral star polyhedra with 60 shaded triangular facets (Lambertian diffuse cosine shading $\mathbf{N} \cdot \mathbf{L}$, specular highlights, depth-sorted Painter's algorithm), audio-reactive radial spike explosion, inner counter-rotating octahedron seed, and an animated background of drifting 3D micro-crystals + radiant energy shockwaves.
