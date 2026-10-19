@@ -189,6 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
     isSpeaking: false
   };
 
+  // --- Resilient Storage Setter (prevents QuotaExceededError crashes) ---
+  function safeStorageSet(key, val) {
+    try {
+      localStorage.setItem(key, String(val));
+    } catch (err) {
+      if (err.name === 'QuotaExceededError' || err.code === 22) {
+        console.warn(`[Storage Quota Exceeded] Unable to persist key: ${key}`);
+      }
+    }
+  }
+  window.safeStorageSet = safeStorageSet;
+
   // --- 1. TOAST NOTIFICATION ---
   function showToast(text, durationMs = 2000) {
     if (statusToast && statusToastText) {
@@ -206,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     size = (size || 'm').toLowerCase();
     if (!['s', 'm', 'l'].includes(size)) size = 'm';
     currentTextSize = size;
-    if (updateStorage) localStorage.setItem('broadcast_text_size', size);
+    if (updateStorage) safeStorageSet('broadcast_text_size', size);
 
     if (textBanner) {
       textBanner.classList.remove('size-s', 'size-m', 'size-l');
@@ -226,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = inputBannerText ? inputBannerText.value.trim() : '';
     const displayText = text || DEFAULT_TEXT;
     textContent.textContent = displayText;
-    localStorage.setItem('broadcast_banner_text', displayText);
+    safeStorageSet('broadcast_banner_text', displayText);
 
     if (textProfileBadge) {
       textProfileBadge.classList.toggle('hidden', !isProfileVisible);
@@ -258,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleTextBanner) {
     toggleTextBanner.addEventListener('change', (e) => {
       isTextVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_text', isTextVisible.toString());
+      safeStorageSet('broadcast_show_text', isTextVisible.toString());
       if (textBanner) textBanner.classList.toggle('hidden', !isTextVisible);
       if (groupTextBody) groupTextBody.style.display = isTextVisible ? 'flex' : 'none';
       showToast(isTextVisible ? 'TITLE: ON' : 'TITLE: OFF');
@@ -269,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleProfilePhoto) {
     toggleProfilePhoto.addEventListener('change', (e) => {
       isProfileVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_profile', isProfileVisible.toString());
+      safeStorageSet('broadcast_show_profile', isProfileVisible.toString());
       if (profileUploadRow) profileUploadRow.classList.toggle('hidden', !isProfileVisible);
       if (profileUrlRow) profileUrlRow.classList.toggle('hidden', !isProfileVisible);
       renderTitleCard();
@@ -285,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reader.onload = (loadEvt) => {
         profileAvatarSrc = loadEvt.target.result;
         try {
-          localStorage.setItem('broadcast_profile_img', profileAvatarSrc);
+          safeStorageSet('broadcast_profile_img', profileAvatarSrc);
         } catch (_) {}
         renderTitleCard();
         showToast('PHOTO UPDATED');
@@ -299,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const val = e.target.value.trim();
       if (val) {
         profileAvatarSrc = val;
-        localStorage.setItem('broadcast_profile_img', val);
+        safeStorageSet('broadcast_profile_img', val);
         renderTitleCard();
         showToast('PHOTO UPDATED');
       }
@@ -311,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     size = (size || 'm').toLowerCase();
     if (!['s', 'm', 'l'].includes(size)) size = 'm';
     currentMediaSize = size;
-    if (updateStorage) localStorage.setItem('broadcast_media_size', size);
+    if (updateStorage) safeStorageSet('broadcast_media_size', size);
 
     if (mediaCard) {
       mediaCard.classList.remove('size-s', 'size-m', 'size-l');
@@ -329,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setMediaMode(mode) {
     currentMediaMode = mode === 'img' ? 'img' : 'qr';
-    localStorage.setItem('broadcast_media_mode', currentMediaMode);
+    safeStorageSet('broadcast_media_mode', currentMediaMode);
 
     if (btnModeQr) btnModeQr.classList.toggle('active', currentMediaMode === 'qr');
     if (btnModeImg) btnModeImg.classList.toggle('active', currentMediaMode === 'img');
@@ -350,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mediaQrContainer.classList.remove('hidden');
         mediaQrContainer.innerHTML = '';
         const link = (inputQrLink ? inputQrLink.value.trim() : '') || DEFAULT_QR_URL;
-        localStorage.setItem('broadcast_qr_url', link);
+        safeStorageSet('broadcast_qr_url', link);
 
         if (window.QRCode) {
           try {
@@ -415,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleQrCta) {
     toggleQrCta.addEventListener('change', (e) => {
       isQrCtaVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_qr_cta', isQrCtaVisible.toString());
+      safeStorageSet('broadcast_show_qr_cta', isQrCtaVisible.toString());
       if (qrCtaInputRow) qrCtaInputRow.classList.toggle('hidden', !isQrCtaVisible);
       renderMediaContent();
     });
@@ -425,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleQrUrl) {
     toggleQrUrl.addEventListener('change', (e) => {
       isQrUrlVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_qr_url', isQrUrlVisible.toString());
+      safeStorageSet('broadcast_show_qr_url', isQrUrlVisible.toString());
       if (qrUrlInputRow) qrUrlInputRow.classList.toggle('hidden', !isQrUrlVisible);
       renderMediaContent();
     });
@@ -435,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleMediaCard) {
     toggleMediaCard.addEventListener('change', (e) => {
       isMediaVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_media', isMediaVisible.toString());
+      safeStorageSet('broadcast_show_media', isMediaVisible.toString());
       if (mediaCard) mediaCard.classList.toggle('hidden', !isMediaVisible);
       if (groupMediaBody) groupMediaBody.style.display = isMediaVisible ? 'flex' : 'none';
       showToast(isMediaVisible ? 'MEDIA: ON' : 'MEDIA: OFF');
@@ -461,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const reader = new FileReader();
       reader.onload = (loadEvt) => {
         customImgData = loadEvt.target.result;
-        try { localStorage.setItem('broadcast_custom_img', customImgData); } catch (_) {}
+        try { safeStorageSet('broadcast_custom_img', customImgData); } catch (_) {}
         renderMediaContent();
         showToast('IMAGE LOADED');
       };
@@ -474,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const url = e.target.value.trim();
       if (url) {
         customImgData = url;
-        localStorage.setItem('broadcast_custom_img', url);
+        safeStorageSet('broadcast_custom_img', url);
         renderMediaContent();
         showToast('IMAGE UPDATED');
       }
@@ -541,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleSpectrogram) {
     toggleSpectrogram.addEventListener('change', (e) => {
       isSpectrogramVisible = e.target.checked;
-      localStorage.setItem('broadcast_show_spectrogram', isSpectrogramVisible.toString());
+      safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
       updateSpectrogram();
       showToast(isSpectrogramVisible ? 'SPECTROGRAM: ON' : 'SPECTROGRAM: OFF');
     });
@@ -619,8 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
       element.classList.remove('is-dragging');
 
       const rect = element.getBoundingClientRect();
-      localStorage.setItem(`${storageKey}_left`, rect.left);
-      localStorage.setItem(`${storageKey}_top`, rect.top);
+      safeStorageSet(`${storageKey}_left`, rect.left);
+      safeStorageSet(`${storageKey}_top`, rect.top);
 
       window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('mouseup', onPointerUp);
@@ -785,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Motion Style Controls (Minimal vs Turbo)
   function setMotionStyle(style) {
     const activeStyle = engine.setMotionStyle(style);
-    localStorage.setItem('broadcast_motion_style', activeStyle);
+    safeStorageSet('broadcast_motion_style', activeStyle);
     if (btnStyleMinimal) btnStyleMinimal.classList.toggle('active', activeStyle === 'minimal');
     if (btnStyleTurbo) btnStyleTurbo.classList.toggle('active', activeStyle === 'turbo');
     showToast(`MOTION STYLE: ${activeStyle.toUpperCase()}`);
@@ -847,6 +859,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- 9. DRAWER & IDLE CONTROLS ---
+  let lastFocusedElement = null;
+
   function resetIdle() {
     document.body.classList.remove('is-idle');
     if (idleTimer) clearTimeout(idleTimer);
@@ -863,15 +877,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openDrawer() {
     isDrawerOpen = true;
+    lastFocusedElement = document.activeElement;
     document.body.classList.remove('is-idle');
     if (idleTimer) clearTimeout(idleTimer);
     settingsDrawer.classList.remove('hidden');
+    if (menuFab) menuFab.setAttribute('aria-expanded', 'true');
+    if (settingsCloseBtn) {
+      setTimeout(() => settingsCloseBtn.focus(), 60);
+    }
   }
 
   function closeDrawer() {
     isDrawerOpen = false;
     settingsDrawer.classList.add('hidden');
+    if (menuFab) menuFab.setAttribute('aria-expanded', 'false');
     resetIdle();
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
+  }
+
+  if (settingsDrawer) {
+    settingsDrawer.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        const focusable = settingsDrawer.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const focusableArr = Array.from(focusable).filter(el => !el.disabled && el.offsetParent !== null);
+        if (focusableArr.length === 0) return;
+
+        const first = focusableArr[0];
+        const last = focusableArr[focusableArr.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    });
   }
 
   if (menuFab) menuFab.addEventListener('click', () => isDrawerOpen ? closeDrawer() : openDrawer());
@@ -884,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleAutohide) {
     toggleAutohide.addEventListener('change', (e) => {
       isAutohideEnabled = e.target.checked;
-      localStorage.setItem('broadcast_autohide_menu', isAutohideEnabled.toString());
+      safeStorageSet('broadcast_autohide_menu', isAutohideEnabled.toString());
       resetIdle();
       showToast(isAutohideEnabled ? 'AUTO-HIDE: ON' : 'AUTO-HIDE: OFF');
     });
@@ -993,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnPwaDismiss) {
     btnPwaDismiss.addEventListener('click', () => {
       if (pwaInstallBanner) pwaInstallBanner.classList.add('hidden');
-      localStorage.setItem('broadcast_pwa_dismissed', 'true');
+      safeStorageSet('broadcast_pwa_dismissed', 'true');
     });
   }
 
@@ -1068,7 +1118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       applyTheme(theme);
     } else if (upperKey === 'S') {
       isSpectrogramVisible = !isSpectrogramVisible;
-      localStorage.setItem('broadcast_show_spectrogram', isSpectrogramVisible.toString());
+      safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
       if (toggleSpectrogram) toggleSpectrogram.checked = isSpectrogramVisible;
       updateSpectrogram();
       showToast(isSpectrogramVisible ? 'SPECTROGRAM: ON' : 'SPECTROGRAM: OFF');

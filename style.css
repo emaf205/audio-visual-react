@@ -40,6 +40,17 @@ html, body {
   -webkit-user-select: none;
 }
 
+/* Accessibility Focus Rings (WCAG AA/AAA) */
+:focus-visible {
+  outline: 2.5px solid var(--neon-cyan) !important;
+  outline-offset: 2px !important;
+}
+
+body.theme-light :focus-visible {
+  outline: 2.5px solid #000000 !important;
+  outline-offset: 2px !important;
+}
+
 /* Fullscreen Background Canvas */
 #visual-canvas {
   position: absolute;
