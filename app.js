@@ -125,11 +125,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleUnifiedStack = document.getElementById('toggle-unified-stack');
   const groupUnifiedBody = document.getElementById('group-unified-body');
 
-  // DOM Elements — Bottom Spectrogram (1/4 Screen Height)
+  // DOM Elements — Bottom Spectrogram (1/3 Viewport Height)
   const bottomSpectrogram = document.getElementById('bottom-spectrogram');
   const spectrogramCanvas = document.getElementById('spectrogram-canvas');
   const toggleSpectrogram = document.getElementById('toggle-spectrogram');
   let spectroCtx = spectrogramCanvas ? spectrogramCanvas.getContext('2d') : null;
+
+  // DOM Elements — Digital LED Marquee Ticker ("Farmacia" Style)
+  const marqueeTicker = document.getElementById('marquee-ticker');
+  const marqueeTextChunk1 = document.getElementById('marquee-text-chunk-1');
+  const marqueeTextChunk2 = document.getElementById('marquee-text-chunk-2');
+  const toggleMarquee = document.getElementById('toggle-marquee');
+  const inputMarqueeText = document.getElementById('input-marquee-text');
+  const marqueeColorBtns = document.querySelectorAll('.marquee-color-btn[data-color]');
+  const marqueeSpeedBtns = document.querySelectorAll('.marquee-speed-btn[data-speed]');
+  const marqueePosBtns = document.querySelectorAll('.marquee-pos-btn[data-pos]');
 
   // DOM Elements — iOS Settings Drawer
   const settingsDrawer = document.getElementById('settings-drawer');
@@ -194,6 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let isQrUrlVisible = localStorage.getItem('broadcast_show_qr_url') === 'true';
 
   let isSpectrogramVisible = localStorage.getItem('broadcast_show_spectrogram') === 'true';
+
+  // App State — Digital LED Marquee Ticker ("Farmacia" Style)
+  const DEFAULT_MARQUEE_TEXT = "+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++";
+  let isMarqueeVisible = localStorage.getItem('broadcast_show_marquee') === 'true';
+  let marqueeText = localStorage.getItem('broadcast_marquee_text') || DEFAULT_MARQUEE_TEXT;
+  let marqueeColor = localStorage.getItem('broadcast_marquee_color') || 'pharmacy';
+  let marqueeSpeed = localStorage.getItem('broadcast_marquee_speed') || 'normal';
+  let marqueePos = localStorage.getItem('broadcast_marquee_pos') || 'bottom';
 
   let isAutoRotating = true;
   let autoRotateTimer = null;
@@ -638,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleUnifiedStack.addEventListener('change', (e) => setUnifiedStack(e.target.checked));
   }
 
-  // --- 4. BOTTOM SPECTROGRAM DOCK (1/4 Viewport Height) ---
+  // --- 4. BOTTOM SPECTROGRAM DOCK (1/3 Viewport Height) ---
   function updateSpectrogram() {
     if (!spectrogramCanvas || !bottomSpectrogram) return;
 
@@ -693,6 +711,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       bottomSpectrogram.classList.add('hidden');
     }
+
+    document.body.classList.toggle('has-spectrogram', isSpectrogramVisible);
   }
 
   if (toggleSpectrogram) {
@@ -701,6 +721,109 @@ document.addEventListener('DOMContentLoaded', () => {
       safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
       updateSpectrogram();
       showToast(isSpectrogramVisible ? 'SPECTROGRAM: ON' : 'SPECTROGRAM: OFF');
+    });
+  }
+
+  // --- 4B. DIGITAL LED MARQUEE TICKER ("Farmacia" Style) ---
+  function updateMarqueeUI() {
+    if (!marqueeTicker) return;
+
+    if (isMarqueeVisible) {
+      marqueeTicker.classList.remove('hidden');
+    } else {
+      marqueeTicker.classList.add('hidden');
+    }
+
+    const cleanText = (marqueeText && marqueeText.trim()) ? marqueeText : DEFAULT_MARQUEE_TEXT;
+    if (marqueeTextChunk1) marqueeTextChunk1.textContent = cleanText;
+    if (marqueeTextChunk2) marqueeTextChunk2.textContent = cleanText;
+    if (inputMarqueeText && inputMarqueeText.value !== cleanText) {
+      inputMarqueeText.value = cleanText;
+    }
+
+    // Color Palette Class
+    ['color-pharmacy', 'color-theme', 'color-amber', 'color-cyan'].forEach(c => marqueeTicker.classList.remove(c));
+    marqueeTicker.classList.add(`color-${marqueeColor}`);
+    if (marqueeColorBtns) {
+      marqueeColorBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.color === marqueeColor);
+      });
+    }
+
+    // Speed Class
+    ['speed-slow', 'speed-normal', 'speed-fast'].forEach(s => marqueeTicker.classList.remove(s));
+    marqueeTicker.classList.add(`speed-${marqueeSpeed}`);
+    if (marqueeSpeedBtns) {
+      marqueeSpeedBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.speed === marqueeSpeed);
+      });
+    }
+
+    // Position Class
+    ['pos-bottom', 'pos-top'].forEach(p => marqueeTicker.classList.remove(p));
+    marqueeTicker.classList.add(`pos-${marqueePos}`);
+    if (marqueePosBtns) {
+      marqueePosBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.pos === marqueePos);
+      });
+    }
+
+    if (toggleMarquee) {
+      toggleMarquee.checked = isMarqueeVisible;
+    }
+  }
+
+  function setMarqueeVisible(visible) {
+    isMarqueeVisible = visible;
+    safeStorageSet('broadcast_show_marquee', visible.toString());
+    updateMarqueeUI();
+    showToast(visible ? 'MARQUEE TICKER: ON' : 'MARQUEE TICKER: OFF');
+  }
+
+  if (toggleMarquee) {
+    toggleMarquee.addEventListener('change', (e) => setMarqueeVisible(e.target.checked));
+  }
+
+  if (inputMarqueeText) {
+    inputMarqueeText.addEventListener('input', (e) => {
+      marqueeText = e.target.value;
+      safeStorageSet('broadcast_marquee_text', marqueeText);
+      const clean = marqueeText.trim() || DEFAULT_MARQUEE_TEXT;
+      if (marqueeTextChunk1) marqueeTextChunk1.textContent = clean;
+      if (marqueeTextChunk2) marqueeTextChunk2.textContent = clean;
+    });
+  }
+
+  if (marqueeColorBtns) {
+    marqueeColorBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        marqueeColor = btn.dataset.color;
+        safeStorageSet('broadcast_marquee_color', marqueeColor);
+        updateMarqueeUI();
+        showToast(`MARQUEE: ${marqueeColor.toUpperCase()}`);
+      });
+    });
+  }
+
+  if (marqueeSpeedBtns) {
+    marqueeSpeedBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        marqueeSpeed = btn.dataset.speed;
+        safeStorageSet('broadcast_marquee_speed', marqueeSpeed);
+        updateMarqueeUI();
+        showToast(`SPEED: ${marqueeSpeed.toUpperCase()}`);
+      });
+    });
+  }
+
+  if (marqueePosBtns) {
+    marqueePosBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        marqueePos = btn.dataset.pos;
+        safeStorageSet('broadcast_marquee_pos', marqueePos);
+        updateMarqueeUI();
+        showToast(`POSITION: ${marqueePos.toUpperCase()}`);
+      });
     });
   }
 
@@ -807,8 +930,16 @@ document.addEventListener('DOMContentLoaded', () => {
   makeDraggable(clockWidget, 'clock');
   makeDraggable(unifiedCard, 'unified');
 
-  // --- 6. 3D SCENE CONTROLS (5 Channels) ---
-  const SHORT_SCENE_NAMES = ['GEODESIC', 'TESSERACT', 'WARP', 'SYNCHRO', 'MONOLITH'];
+  // --- 6. 3D SCENE CONTROLS (7 Channels) ---
+  const SHORT_SCENE_NAMES = [
+    'GEODESIC',
+    'TESSERACT',
+    'WARP',
+    'SYNCHRO',
+    'MONOLITH',
+    'STELLATION',
+    'CYBER HELIX'
+  ];
 
   function updateSceneUI(scene, notify = true) {
     const rawName = scene.name.replace(/^CH \d+ \/\/ /, '');
@@ -1012,6 +1143,17 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('unified_left');
       localStorage.removeItem('unified_top');
       localStorage.removeItem('broadcast_unified_stack');
+      localStorage.removeItem('broadcast_show_marquee');
+      localStorage.removeItem('broadcast_marquee_text');
+      localStorage.removeItem('broadcast_marquee_color');
+      localStorage.removeItem('broadcast_marquee_speed');
+      localStorage.removeItem('broadcast_marquee_pos');
+      isMarqueeVisible = false;
+      marqueeText = DEFAULT_MARQUEE_TEXT;
+      marqueeColor = 'pharmacy';
+      marqueeSpeed = 'normal';
+      marqueePos = 'bottom';
+      updateMarqueeUI();
 
       setUnifiedStack(false, true);
 
@@ -1297,7 +1439,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const sc = engine.prevScene();
       updateSceneUI(sc);
-    } else if (['1', '2', '3', '4', '5'].includes(e.key)) {
+    } else if (['1', '2', '3', '4', '5', '6', '7'].includes(e.key)) {
       const idx = parseInt(e.key, 10) - 1;
       const sc = engine.setScene(idx);
       stopAutoRotation();
@@ -1307,6 +1449,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const theme = engine.nextTheme();
       applyTheme(theme);
+    } else if (upperKey === 'T') {
+      setMarqueeVisible(!isMarqueeVisible);
     } else if (upperKey === 'S') {
       isSpectrogramVisible = !isSpectrogramVisible;
       safeStorageSet('broadcast_show_spectrogram', isSpectrogramVisible.toString());
@@ -1373,6 +1517,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clockDateRow) clockDateRow.classList.toggle('hidden', !isClockDate);
 
     if (toggleSpectrogram) toggleSpectrogram.checked = isSpectrogramVisible;
+    if (toggleMarquee) toggleMarquee.checked = isMarqueeVisible;
+    if (inputMarqueeText) inputMarqueeText.value = marqueeText;
 
     const savedAutohide = localStorage.getItem('broadcast_autohide_menu');
     if (savedAutohide !== null) {
@@ -1395,6 +1541,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setUnifiedStack(isUnifiedStack, false);
   updateSpectrogram();
+  updateMarqueeUI();
   resetIdle();
 
   // Initial random atmosphere and scene

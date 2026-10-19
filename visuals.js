@@ -89,13 +89,15 @@ class VisualEngine {
       }
     ];
 
-    // 5 Pure 3D Geometric Engines (Selected for Maximum Kinetic Impact & Swiss Rigor)
+    // 7 Pure 3D Geometric Engines (Selected for Maximum Kinetic Impact & Swiss Rigor)
     this.scenes = [
       { id: 'geodesic',    name: 'CH 01 // 3D GEODESIC SPECTRUM' },
       { id: 'tesseract',   name: 'CH 02 // 3D HYPER TESSERACT' },
       { id: 'tunnel',      name: 'CH 03 // 3D CYBER WARP TUNNEL' },
       { id: 'synchrotron', name: 'CH 04 // 3D QUANTUM SYNCHROTRON' },
-      { id: 'monolith',    name: 'CH 05 // 3D MATRIX MONOLITH' }
+      { id: 'monolith',    name: 'CH 05 // 3D MATRIX MONOLITH' },
+      { id: 'stellation',  name: 'CH 06 // 3D POLYHEDRAL STELLATION' },
+      { id: 'cyberhelix',  name: 'CH 07 // 3D CYBER HELIX LATTICE' }
     ];
     this.currentScene = 0;
 
@@ -123,6 +125,8 @@ class VisualEngine {
     this.initCyberTunnel();
     this.initSynchrotron();
     this.initMatrixMonolith();
+    this.initPolyhedralStellation();
+    this.initCyberHelix();
 
     this.resize();
     window.addEventListener('resize', () => this.resize());
@@ -437,6 +441,12 @@ class VisualEngine {
         break;
       case 4:
         this.render3DMatrixMonolith(ctx, W, H, theme, audio, dt);
+        break;
+      case 5:
+        this.render3DPolyhedralStellation(ctx, W, H, theme, audio, dt);
+        break;
+      case 6:
+        this.render3DCyberHelix(ctx, W, H, theme, audio, dt);
         break;
     }
 
@@ -1790,6 +1800,636 @@ class VisualEngine {
       }
       ctx.stroke();
     }
+
+    ctx.restore();
+  }
+
+  // --- HELPER: ROBUST HEX PARSER FOR SHADING ---
+  parseHex(hex, fallback = [255, 255, 255]) {
+    if (!hex || typeof hex !== 'string' || hex[0] !== '#') return fallback;
+    if (hex.length === 7) {
+      return [
+        parseInt(hex.slice(1, 3), 16) || 0,
+        parseInt(hex.slice(3, 5), 16) || 0,
+        parseInt(hex.slice(5, 7), 16) || 0
+      ];
+    }
+    return fallback;
+  }
+
+  // ==========================================================================
+  // CH 06 // 3D POLYHEDRAL STELLATION ENGINE
+  // (Kepler-Poinsot 60-Faceted Star Polyhedron with Depth Sorting & Kinetic Nebula)
+  // ==========================================================================
+  initPolyhedralStellation() {
+    const phi = (1 + Math.sqrt(5)) * 0.5;
+    const baseVerts = [
+      [-1,  phi,  0], [ 1,  phi,  0], [-1, -phi,  0], [ 1, -phi,  0],
+      [ 0, -1,  phi], [ 0,  1,  phi], [ 0, -1, -phi], [ 0,  1, -phi],
+      [ phi,  0, -1], [ phi,  0,  1], [-phi,  0, -1], [-phi,  0,  1]
+    ];
+
+    const norm = (v) => {
+      const len = Math.hypot(v[0], v[1], v[2]) || 1;
+      return [v[0] / len, v[1] / len, v[2] / len];
+    };
+    this.stellationBaseVerts = baseVerts.map(norm);
+
+    const baseFaces = [
+      [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+      [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+      [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+      [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
+    ];
+    this.stellationBaseFaces = baseFaces;
+
+    // Face Normals & Centers for the 20 Icosahedral Faces
+    this.stellationFaceNormals = baseFaces.map(([i0, i1, i2]) => {
+      const v0 = this.stellationBaseVerts[i0];
+      const v1 = this.stellationBaseVerts[i1];
+      const v2 = this.stellationBaseVerts[i2];
+      return norm([
+        (v0[0] + v1[0] + v2[0]) / 3,
+        (v0[1] + v1[1] + v2[1]) / 3,
+        (v0[2] + v1[2] + v2[2]) / 3
+      ]);
+    });
+
+    // Inner Counter-Rotating Octahedron
+    this.stellationCoreVerts = [
+      [ 1,  0,  0], [-1,  0,  0],
+      [ 0,  1,  0], [ 0, -1,  0],
+      [ 0,  0,  1], [ 0,  0, -1]
+    ];
+    this.stellationCoreFaces = [
+      [0, 2, 4], [2, 1, 4], [1, 3, 4], [3, 0, 4],
+      [2, 0, 5], [1, 2, 5], [3, 1, 5], [0, 3, 5]
+    ];
+
+    // Background Micro-Polyhedra Swarm (28 Drifting 3D Floating Crystals)
+    this.stellationSwarm = [];
+    for (let i = 0; i < 28; i++) {
+      this.stellationSwarm.push({
+        x: (Math.random() - 0.5) * 1400,
+        y: (Math.random() - 0.5) * 1100,
+        z: Math.random() * 900 - 200,
+        rotX: Math.random() * Math.PI * 2,
+        rotY: Math.random() * Math.PI * 2,
+        speedX: (Math.random() - 0.5) * 14,
+        speedY: (Math.random() - 0.5) * 14,
+        rotSpeedX: (Math.random() - 0.5) * 0.9,
+        rotSpeedY: (Math.random() - 0.5) * 0.9,
+        size: 9 + Math.random() * 14
+      });
+    }
+  }
+
+  render3DPolyhedralStellation(ctx, W, H, theme, audio, dt) {
+    ctx.save();
+    const cx = W * 0.5;
+    const cy = H * 0.5;
+    const fov = Math.min(W, H) * 0.98;
+    const baseRadius = Math.min(W, H) * (this.motionStyle === 'minimal' ? 0.22 : 0.26);
+
+    const freq = audio && audio.rawFreq ? audio.rawFreq : null;
+
+    // --- 1. ANIMATED BACKGROUND: RADIANT ENERGY PULSE & FLOATING 3D CRYSTALS ---
+    const primaryRgb = this.parseHex(theme.primary, [255, 255, 255]);
+    const secondaryRgb = this.parseHex(theme.secondary, [0, 240, 255]);
+    const accentRgb = this.parseHex(theme.accent, [100, 180, 255]);
+
+    // Background Kinetic Concentric Shockwaves
+    const waveCount = 5;
+    const maxRadius = Math.hypot(cx, cy) * 0.9;
+    ctx.lineWidth = 1.2;
+    for (let w = 0; w < waveCount; w++) {
+      const prog = ((this.time * 0.22 + w / waveCount) % 1.0);
+      const ringR = prog * maxRadius;
+      const alpha = Math.sin(prog * Math.PI) * (0.12 + this.smoothBass * 0.22);
+      ctx.strokeStyle = `rgba(${secondaryRgb[0]}, ${secondaryRgb[1]}, ${secondaryRgb[2]}, ${alpha})`;
+      ctx.beginPath();
+      const sides = 12;
+      for (let s = 0; s <= sides; s++) {
+        const th = (s / sides) * Math.PI * 2 + this.time * 0.1;
+        const px = cx + Math.cos(th) * ringR;
+        const py = cy + Math.sin(th) * ringR;
+        if (s === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // Drifting 3D Micro-Crystals in Background Swarm
+    for (let i = 0; i < this.stellationSwarm.length; i++) {
+      const p = this.stellationSwarm[i];
+      p.x += p.speedX * dt;
+      p.y += p.speedY * dt;
+      p.rotX += p.rotSpeedX * dt;
+      p.rotY += p.rotSpeedY * dt;
+
+      // Wrap-around bounds
+      if (p.x < -750) p.x = 750;
+      if (p.x > 750) p.x = -750;
+      if (p.y < -600) p.y = 600;
+      if (p.y > 600) p.y = -600;
+
+      const zCam = p.z + 500;
+      if (zCam <= 10) continue;
+      const scale = fov / (fov + zCam);
+      const scrX = cx + p.x * scale;
+      const scrY = cy + p.y * scale;
+      const drawSize = p.size * scale * (1.0 + this.smoothVol * 0.4);
+
+      if (scrX < -50 || scrX > W + 50 || scrY < -50 || scrY > H + 50) continue;
+
+      ctx.save();
+      ctx.translate(scrX, scrY);
+      ctx.rotate(p.rotX);
+      const depthAlpha = Math.max(0.08, Math.min(0.45, 1.0 - p.z / 900));
+      ctx.strokeStyle = `rgba(${accentRgb[0]}, ${accentRgb[1]}, ${accentRgb[2]}, ${depthAlpha})`;
+      ctx.lineWidth = 1.0;
+      ctx.beginPath();
+      // 2D Projection of Diamond Crystal
+      ctx.moveTo(0, -drawSize);
+      ctx.lineTo(drawSize * 0.65, 0);
+      ctx.lineTo(0, drawSize);
+      ctx.lineTo(-drawSize * 0.65, 0);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // --- 2. 3D ORIENTATION & STELLATION EXTRUSION ---
+    const rotSpeed = 0.55 + this.smoothVol * 0.95;
+    const angX = this.time * 0.38 * rotSpeed;
+    const angY = this.time * 0.62 * rotSpeed;
+    const angZ = this.time * 0.22;
+
+    const cosX = Math.cos(angX), sinX = Math.sin(angX);
+    const cosY = Math.cos(angY), sinY = Math.sin(angY);
+    const cosZ = Math.cos(angZ), sinZ = Math.sin(angZ);
+
+    // Directional Key Light Vector in Camera Space (Top-Right-Front)
+    const lx = 0.577, ly = -0.65, lz = -0.49;
+    const lLen = Math.hypot(lx, ly, lz) || 1;
+    const nlx = lx / lLen, nly = ly / lLen, nlz = lz / lLen;
+
+    // Transform 3D Point by Euler Angles (ZYX)
+    const transform3D = (x, y, z) => {
+      const x1 = x * cosY + z * sinY;
+      const z1 = -x * sinY + z * cosY;
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
+      const x3 = x1 * cosZ - y2 * sinZ;
+      const y3 = x1 * sinZ + y2 * cosZ;
+      return [x3, y3, z2];
+    };
+
+    // Project 3D Camera Coord to 2D Screen
+    const project2D = (x, y, z) => {
+      const zCam = z + 560;
+      const scale = fov / (fov + zCam);
+      return { px: cx + x * scale, py: cy + y * scale, z, scale };
+    };
+
+    // Transform 12 Base Vertices
+    const baseRadiusActive = baseRadius * (1.0 + this.smoothBass * 0.24);
+    const transformedBase = this.stellationBaseVerts.map(v => {
+      const [x, y, z] = transform3D(v[0] * baseRadiusActive, v[1] * baseRadiusActive, v[2] * baseRadiusActive);
+      return { x, y, z, p2d: project2D(x, y, z) };
+    });
+
+    // Compute & Transform 20 Stellated Apex Vertices (Audio Reactive Spikes)
+    const baseExtrusion = (1.45 + this.smoothBass * 0.85 + this.smoothHigh * 0.55);
+    const transformedApexes = this.stellationFaceNormals.map((fn, faceIdx) => {
+      let faceAmp = 0;
+      if (freq && freq.length > 0) {
+        const bin = Math.floor((faceIdx / this.stellationFaceNormals.length) * 36) % freq.length;
+        faceAmp = freq[bin] / 255.0;
+      } else {
+        faceAmp = Math.sin(this.time * 4.0 + faceIdx * 0.8) * 0.5 + 0.5;
+      }
+
+      const spikeExt = baseRadiusActive * baseExtrusion * (1.0 + faceAmp * 0.65);
+      const [x, y, z] = transform3D(fn[0] * spikeExt, fn[1] * spikeExt, fn[2] * spikeExt);
+      return { x, y, z, p2d: project2D(x, y, z), amp: faceAmp };
+    });
+
+    // --- 3. CONSTRUCT 60 FACETED TRIANGULAR POLYGONS ---
+    const facesToRender = [];
+
+    this.stellationBaseFaces.forEach(([i0, i1, i2], faceIdx) => {
+      const v0 = transformedBase[i0];
+      const v1 = transformedBase[i1];
+      const v2 = transformedBase[i2];
+      const apex = transformedApexes[faceIdx];
+
+      // 3 Triangular Facets erecting to the Stellated Apex
+      const facetTriangles = [
+        [v0, v1, apex],
+        [v1, v2, apex],
+        [v2, v0, apex]
+      ];
+
+      facetTriangles.forEach((tri, subIdx) => {
+        const [a, b, c] = tri;
+        // Face normal in transformed camera space
+        const abx = b.x - a.x, aby = b.y - a.y, abz = b.z - a.z;
+        const acx = c.x - a.x, acy = c.y - a.y, acz = c.z - a.z;
+        let nx = aby * acz - abz * acy;
+        let ny = abz * acx - abx * acz;
+        let nz = abx * acy - aby * acx;
+        const nLen = Math.hypot(nx, ny, nz) || 1;
+        nx /= nLen; ny /= nLen; nz /= nLen;
+
+        // Centroid & Depth
+        const cz = (a.z + b.z + c.z) / 3;
+
+        // Screen-space 2D signed area (Back-face Culling)
+        const area2d = (b.p2d.px - a.p2d.px) * (c.p2d.py - a.p2d.py) - (b.p2d.py - a.p2d.py) * (c.p2d.px - a.p2d.px);
+        const isFacing = area2d > 0;
+
+        // Lambertian Diffuse Lighting
+        const dotLight = nx * nlx + ny * nly + nz * nlz;
+        const diffuse = Math.max(0.14, dotLight);
+
+        // Specular Reflection Highlight
+        const rx = 2 * dotLight * nx - nlx;
+        const ry = 2 * dotLight * ny - nly;
+        const rz = 2 * dotLight * nz - nlz;
+        const spec = Math.pow(Math.max(0, -rz), 14) * 0.75;
+
+        facesToRender.push({
+          pts: [a.p2d, b.p2d, c.p2d],
+          cz,
+          diffuse,
+          spec,
+          isFacing,
+          faceAmp: apex.amp,
+          subIdx
+        });
+      });
+    });
+
+    // --- 4. DEPTH SORTING (Painter's Algorithm: Farthest Polygons Render First) ---
+    facesToRender.sort((f1, f2) => f2.cz - f1.cz);
+
+    // --- 5. RENDER SHADED 3D FACETS & CRISP POLYGONAL EDGES ---
+    ctx.lineJoin = 'round';
+
+    facesToRender.forEach(face => {
+      const [p0, p1, p2] = face.pts;
+
+      ctx.beginPath();
+      ctx.moveTo(p0.px, p0.py);
+      ctx.lineTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.closePath();
+
+      if (theme.isLight) {
+        // High-Rigour Swiss Paper Shading
+        const shade = Math.min(1.0, face.diffuse * 0.85 + face.spec * 0.4);
+        const fillAlpha = face.isFacing ? (0.20 + shade * 0.65) : 0.08;
+        ctx.fillStyle = `rgba(10, 10, 10, ${fillAlpha})`;
+        ctx.fill();
+
+        ctx.strokeStyle = face.isFacing ? '#0A0A0A' : 'rgba(10, 10, 10, 0.25)';
+        ctx.lineWidth = face.isFacing ? 1.4 : 0.7;
+        ctx.stroke();
+      } else {
+        // Deep Cinematic Demoscene Neon Shading
+        const d = face.diffuse;
+        const s = face.spec;
+
+        // Interpolate facet tone between secondary and primary based on audio amp and lighting
+        const r = Math.min(255, Math.floor(secondaryRgb[0] * d + s * 160 + face.faceAmp * 40));
+        const g = Math.min(255, Math.floor(secondaryRgb[1] * d + s * 160 + face.faceAmp * 40));
+        const b = Math.min(255, Math.floor(secondaryRgb[2] * d + s * 160 + face.faceAmp * 40));
+        const facetAlpha = face.isFacing ? Math.min(0.92, 0.35 + d * 0.50 + s * 0.35) : 0.12;
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${facetAlpha})`;
+        ctx.fill();
+
+        // Edge Outlines
+        const edgeAlpha = face.isFacing ? Math.min(1.0, 0.65 + s * 0.35) : 0.22;
+        ctx.strokeStyle = `rgba(${primaryRgb[0]}, ${primaryRgb[1]}, ${primaryRgb[2]}, ${edgeAlpha})`;
+        ctx.lineWidth = face.isFacing ? 1.3 : 0.8;
+        ctx.stroke();
+      }
+    });
+
+    // --- 6. INNER FLOATING GYROSCOPIC OCTAHEDRON SEED ---
+    const coreCosX = Math.cos(-angX * 1.5), coreSinX = Math.sin(-angX * 1.5);
+    const coreCosY = Math.cos(-angY * 1.8), coreSinY = Math.sin(-angY * 1.8);
+    const coreRadius = baseRadiusActive * (0.35 + this.smoothVol * 0.25);
+
+    const coreProjected = this.stellationCoreVerts.map(v => {
+      const cx1 = v[0] * coreRadius * coreCosY + v[2] * coreRadius * coreSinY;
+      const cz1 = -v[0] * coreRadius * coreSinY + v[2] * coreRadius * coreCosY;
+      const cy2 = v[1] * coreRadius * coreCosX - cz1 * coreSinX;
+      const cz2 = v[1] * coreRadius * coreSinX + cz1 * coreCosX;
+      return project2D(cx1, cy2, cz2);
+    });
+
+    // Render Inner Octahedron Faces
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = theme.secondary;
+    this.stellationCoreFaces.forEach(([i0, i1, i2]) => {
+      const p0 = coreProjected[i0];
+      const p1 = coreProjected[i1];
+      const p2 = coreProjected[i2];
+      ctx.beginPath();
+      ctx.moveTo(p0.px, p0.py);
+      ctx.lineTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.closePath();
+      ctx.fillStyle = theme.isLight ? 'rgba(0, 0, 0, 0.15)' : `rgba(${accentRgb[0]}, ${accentRgb[1]}, ${accentRgb[2]}, 0.22)`;
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    // Core Glowing Vertices
+    coreProjected.forEach(cp => {
+      ctx.fillStyle = theme.isLight ? '#000000' : '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(cp.px, cp.py, 2.5 * cp.scale, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  // ==========================================================================
+  // CH 07 // 3D CYBER HELIX LATTICE ENGINE
+  // (Monumental Double-Helical Macromolecule with Equalizer Rungs & Cyber Atrium)
+  // ==========================================================================
+  initCyberHelix() {
+    this.helixLevels = 38;
+    this.helixHeightSpan = 840;
+    this.helixTurns = 3.2;
+
+    // Atrium Perspective Grid (Floor & Ceiling)
+    this.atriumCols = 16;
+    this.atriumRows = 14;
+    this.atriumSpacingX = 85;
+    this.atriumSpacingZ = 90;
+    this.atriumOriginZ = -120;
+    this.atriumFloorY = 320;
+    this.atriumCeilY = -320;
+
+    // Distant Cyber Data Columns (14 Background Laser Beams)
+    this.dataBeams = [];
+    for (let i = 0; i < 14; i++) {
+      this.dataBeams.push({
+        x: (i - 7) * 95 + (Math.random() - 0.5) * 30,
+        z: 420 + (i % 3) * 110,
+        packets: [Math.random(), Math.random(), Math.random()],
+        speed: 0.6 + Math.random() * 0.8
+      });
+    }
+  }
+
+  render3DCyberHelix(ctx, W, H, theme, audio, dt) {
+    ctx.save();
+    const cx = W * 0.5;
+    const cy = H * 0.5;
+    const fov = Math.min(W, H) * 1.05;
+    const baseRadius = Math.min(W, H) * (this.motionStyle === 'minimal' ? 0.20 : 0.24);
+
+    const freq = audio && audio.rawFreq ? audio.rawFreq : null;
+
+    const primaryRgb = this.parseHex(theme.primary, [255, 255, 255]);
+    const secondaryRgb = this.parseHex(theme.secondary, [0, 240, 255]);
+    const accentRgb = this.parseHex(theme.accent, [100, 180, 255]);
+
+    // Camera Rotation & Atmospheric Pitch
+    const rotSpeed = 0.45 + this.smoothVol * 0.75;
+    const rotY = this.time * 0.52 * rotSpeed;
+    const rotPitch = Math.sin(this.time * 0.45) * 0.16 + (this.smoothBass * 0.12);
+
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    const cosX = Math.cos(rotPitch), sinX = Math.sin(rotPitch);
+
+    // 3D Perspective Projection with Camera Tilt
+    const projectHelix3D = (worldX, worldY, worldZ) => {
+      // Rotation around Y
+      const x1 = worldX * cosY + worldZ * sinY;
+      const z1 = -worldX * sinY + worldZ * cosY;
+      // Rotation around X (Pitch)
+      const y2 = worldY * cosX - z1 * sinX;
+      const z2 = worldY * sinX + z1 * cosX;
+
+      const zCam = z2 + 620;
+      const scale = fov / (fov + zCam);
+      return {
+        px: cx + x1 * scale,
+        py: cy + y2 * scale,
+        x1, y2, z2, zCam, scale
+      };
+    };
+
+    // --- 1. ANIMATED BACKGROUND: UNDULATING ATRIUM GRID (FLOOR & CEILING) ---
+    ctx.lineWidth = 1.0;
+    const renderAtriumGrid = (isCeiling) => {
+      const baseY = isCeiling ? this.atriumCeilY : this.atriumFloorY;
+      const sign = isCeiling ? -1 : 1;
+      const gridPts = [];
+
+      for (let r = 0; r < this.atriumRows; r++) {
+        gridPts[r] = [];
+        const worldZ = this.atriumOriginZ + r * this.atriumSpacingZ;
+        const bin = Math.floor((r / this.atriumRows) * 32);
+        const rowAmp = freq && freq.length > bin ? (freq[bin] / 255.0) : (Math.sin(this.time * 3 + r * 0.4) * 0.5 + 0.5);
+
+        for (let c = 0; c < this.atriumCols; c++) {
+          const worldX = (c - this.atriumCols * 0.5) * this.atriumSpacingX;
+          const wave = Math.sin(worldX * 0.015 + this.time * 2.2) * Math.cos(worldZ * 0.012 + this.time * 1.6);
+          const worldY = baseY + sign * (wave * (12 + this.smoothVol * 22) + rowAmp * 45);
+          gridPts[r][c] = projectHelix3D(worldX, worldY, worldZ);
+        }
+      }
+
+      // Draw Latitudinal Grid Lines
+      for (let r = 0; r < this.atriumRows; r++) {
+        const depthAlpha = Math.max(0.06, (1.0 - r / this.atriumRows) * 0.45);
+        ctx.strokeStyle = theme.isLight ? `rgba(0, 0, 0, ${depthAlpha * 0.8})` : `rgba(${accentRgb[0]}, ${accentRgb[1]}, ${accentRgb[2]}, ${depthAlpha})`;
+        ctx.beginPath();
+        for (let c = 0; c < this.atriumCols; c++) {
+          const pt = gridPts[r][c];
+          if (c === 0) ctx.moveTo(pt.px, pt.py);
+          else ctx.lineTo(pt.px, pt.py);
+        }
+        ctx.stroke();
+      }
+
+      // Draw Longitudinal Grid Lines
+      for (let c = 0; c < this.atriumCols; c += 2) {
+        ctx.strokeStyle = theme.isLight ? 'rgba(0, 0, 0, 0.12)' : `rgba(${accentRgb[0]}, ${accentRgb[1]}, ${accentRgb[2]}, 0.18)`;
+        ctx.beginPath();
+        for (let r = 0; r < this.atriumRows; r++) {
+          const pt = gridPts[r][c];
+          if (r === 0) ctx.moveTo(pt.px, pt.py);
+          else ctx.lineTo(pt.px, pt.py);
+        }
+        ctx.stroke();
+      }
+    };
+
+    renderAtriumGrid(false); // Floor
+    renderAtriumGrid(true);  // Ceiling
+
+    // --- 2. DISTANT DATA CONDUIT BEAMS ---
+    this.dataBeams.forEach(b => {
+      const topPt = projectHelix3D(b.x, -460, b.z);
+      const botPt = projectHelix3D(b.x, 460, b.z);
+      if (topPt.zCam > 0 && botPt.zCam > 0) {
+        ctx.strokeStyle = theme.isLight ? 'rgba(0, 0, 0, 0.10)' : `rgba(${secondaryRgb[0]}, ${secondaryRgb[1]}, ${secondaryRgb[2]}, 0.16)`;
+        ctx.lineWidth = 1.0;
+        ctx.beginPath();
+        ctx.moveTo(topPt.px, topPt.py);
+        ctx.lineTo(botPt.px, botPt.py);
+        ctx.stroke();
+
+        // Traveling Light Packet
+        b.packets.forEach((pack, pIdx) => {
+          b.packets[pIdx] = (pack + b.speed * dt * 0.4) % 1.0;
+          const packY = -460 + b.packets[pIdx] * 920;
+          const packPt = projectHelix3D(b.x, packY, b.z);
+          ctx.fillStyle = theme.isLight ? '#000000' : theme.secondary;
+          ctx.beginPath();
+          ctx.arc(packPt.px, packPt.py, 2.0 * packPt.scale, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+    });
+
+    // --- 3. CONSTRUCT 3D DOUBLE-HELIX STRANDS & RUNGS ---
+    const strandsA = [];
+    const strandsB = [];
+    const rungs = [];
+
+    const halfSpan = this.helixHeightSpan * 0.5;
+    const stepY = this.helixHeightSpan / (this.helixLevels - 1);
+
+    for (let i = 0; i < this.helixLevels; i++) {
+      const worldY = -halfSpan + i * stepY;
+      const angle = (i / this.helixLevels) * (Math.PI * 2 * this.helixTurns);
+
+      // Organic dynamic breathing of helical radius
+      const r = baseRadius * (1.0 + this.smoothBass * 0.38 + Math.sin(this.time * 2.8 + i * 0.35) * 0.12);
+
+      // World coordinates of Strand 1 and Strand 2
+      const ax = Math.cos(angle) * r;
+      const az = Math.sin(angle) * r;
+      const bx = Math.cos(angle + Math.PI) * r;
+      const bz = Math.sin(angle + Math.PI) * r;
+
+      const ptA = projectHelix3D(ax, worldY, az);
+      const ptB = projectHelix3D(bx, worldY, bz);
+
+      strandsA.push(ptA);
+      strandsB.push(ptB);
+
+      // Audio frequency mapped to this rung
+      let rungAmp = 0;
+      if (freq && freq.length > 0) {
+        const bin = Math.floor((i / this.helixLevels) * 48) % freq.length;
+        rungAmp = freq[bin] / 255.0;
+      } else {
+        rungAmp = Math.sin(this.time * 4.2 + i * 0.5) * 0.5 + 0.5;
+      }
+
+      // Rung center depth for Painter's algorithm
+      const cz = (ptA.z2 + ptB.z2) * 0.5;
+
+      rungs.push({
+        idx: i,
+        ptA,
+        ptB,
+        cz,
+        amp: rungAmp,
+        worldY
+      });
+    }
+
+    // Sort Rungs by Depth (Back to Front)
+    rungs.sort((r1, r2) => r2.cz - r1.cz);
+
+    // --- 4. RENDER DOUBLE HELIX POLYGONAL RUNGS (Equalizer Data Plates) ---
+    rungs.forEach(rung => {
+      const { ptA, ptB, amp } = rung;
+      const rungThickness = Math.max(2, 6 * ptA.scale);
+
+      // 3D Polygonal Face of Rung
+      ctx.beginPath();
+      ctx.moveTo(ptA.px, ptA.py - rungThickness);
+      ctx.lineTo(ptB.px, ptB.py - rungThickness);
+      ctx.lineTo(ptB.px, ptB.py + rungThickness);
+      ctx.lineTo(ptA.px, ptA.py + rungThickness);
+      ctx.closePath();
+
+      const isActive = amp > 0.30;
+      if (theme.isLight) {
+        const fillAlpha = isActive ? (0.4 + amp * 0.5) : 0.15;
+        ctx.fillStyle = isActive ? theme.secondary : `rgba(0, 0, 0, ${fillAlpha})`;
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      } else {
+        const glowFactor = isActive ? (0.65 + amp * 0.35) : 0.18;
+        const r = Math.floor(secondaryRgb[0] * glowFactor + primaryRgb[0] * (1 - glowFactor));
+        const g = Math.floor(secondaryRgb[1] * glowFactor + primaryRgb[1] * (1 - glowFactor));
+        const b = Math.floor(secondaryRgb[2] * glowFactor + primaryRgb[2] * (1 - glowFactor));
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${glowFactor * 0.85})`;
+        ctx.fill();
+
+        ctx.strokeStyle = isActive ? theme.primary : `rgba(${accentRgb[0]}, ${accentRgb[1]}, ${accentRgb[2]}, 0.35)`;
+        ctx.lineWidth = isActive ? 1.5 : 0.9;
+        ctx.stroke();
+
+        // Central Illuminated Data Core Pip on Rung
+        if (isActive) {
+          const midX = (ptA.px + ptB.px) * 0.5;
+          const midY = (ptA.py + ptB.py) * 0.5;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(midX, midY, 2.5 * ptA.scale, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // --- 5. RENDER CONTINUOUS STRAND BACKBONE RIBBONS ---
+    const renderStrandRibbon = (strands, isStrandA) => {
+      ctx.lineWidth = 2.4;
+      ctx.strokeStyle = isStrandA ? theme.primary : theme.secondary;
+      ctx.beginPath();
+      for (let i = 0; i < strands.length; i++) {
+        const pt = strands[i];
+        if (i === 0) ctx.moveTo(pt.px, pt.py);
+        else ctx.lineTo(pt.px, pt.py);
+      }
+      ctx.stroke();
+
+      // Diamond Node Beads on Helical Backbone
+      for (let i = 0; i < strands.length; i += 2) {
+        const pt = strands[i];
+        const beadSize = 4.2 * pt.scale * (1.0 + this.smoothVol * 0.4);
+        ctx.fillStyle = theme.isLight ? '#000000' : (isStrandA ? theme.secondary : theme.primary);
+        ctx.beginPath();
+        ctx.moveTo(pt.px, pt.py - beadSize);
+        ctx.lineTo(pt.px + beadSize * 0.7, pt.py);
+        ctx.lineTo(pt.px, pt.py + beadSize);
+        ctx.lineTo(pt.px - beadSize * 0.7, pt.py);
+        ctx.closePath();
+        ctx.fill();
+      }
+    };
+
+    renderStrandRibbon(strandsA, true);
+    renderStrandRibbon(strandsB, false);
 
     ctx.restore();
   }

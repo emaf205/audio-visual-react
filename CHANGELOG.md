@@ -5,6 +5,13 @@ All notable changes to **Audio Visual React** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.0] - 2026-10-19
+### Added
+- **CH 06 // 3D POLYHEDRAL STELLATION**: Realistic Kepler-Poinsot icosahedral star polyhedra with 60 shaded triangular facets (Lambertian diffuse cosine shading $\mathbf{N} \cdot \mathbf{L}$, specular highlights, depth-sorted Painter's algorithm), audio-reactive radial spike explosion, inner counter-rotating octahedron seed, and an animated background of drifting 3D micro-crystals + radiant energy shockwaves.
+- **CH 07 // 3D CYBER HELIX LATTICE**: Monumental 3D double-helical superstructure with parametric polygonal cross-struts and illuminated plates, audio-reactive VU-meter rung lighting & breathing radius, and an animated background of undulating 3D perspective floor/ceiling vector grids + distant horizon data conduit beams.
+- **Digital LED Marquee Ticker ("Farmacia" Style)**: Customizable scrolling digital LED ticker tape that floats across the screen above animations, with drawer toggle, message input, color modes (Pharmacy Green `✚`, Theme Reactive `⚡`, Amber `●`, Cyber Cyan `◈`), speed controls (Slow, Normal, Fast), top/bottom positioning, and adaptive auto-docking above the 1/3 spectrogram.
+- **1/3 Viewport Height Spectrogram Dock**: Expanded bottom audio spectrogram analyzer height from 1/4 (25vh) to exactly **1/3** (`33.333dvh`) of the video/screen, providing expanded dynamic vertical range for frequency bars and peak detection.
+
 ## [5.3.0] - 2026-10-19
 ### Added
 - **Independent QR Code & Custom Image Toggles**: Media card now supports displaying QR code only, custom image only, **both simultaneously** (with adaptive `.dual-media` side-by-side / stacked responsive chassis), or neither.

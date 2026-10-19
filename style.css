@@ -1230,7 +1230,10 @@ body.is-idle {
 
 .text-size-chip-btn,
 .size-chip-btn,
-.mode-chip-btn {
+.mode-chip-btn,
+.marquee-color-btn,
+.marquee-speed-btn,
+.marquee-pos-btn {
   min-height: 50px;
   background: transparent;
   border: none;
@@ -1248,25 +1251,39 @@ body.is-idle {
   justify-content: center;
 }
 
-.mode-chip-btn {
-  font-size: 14.5px;
+.mode-chip-btn,
+.marquee-color-btn,
+.marquee-speed-btn,
+.marquee-pos-btn {
+  font-size: 13.5px;
+  min-height: 44px;
+  padding: 6px 10px;
 }
 
 .text-size-chip-btn:hover,
 .size-chip-btn:hover,
-.mode-chip-btn:hover {
+.mode-chip-btn:hover,
+.marquee-color-btn:hover,
+.marquee-speed-btn:hover,
+.marquee-pos-btn:hover {
   color: #ffffff;
 }
 
 .text-size-chip-btn:active,
 .size-chip-btn:active,
-.mode-chip-btn:active {
+.mode-chip-btn:active,
+.marquee-color-btn:active,
+.marquee-speed-btn:active,
+.marquee-pos-btn:active {
   transform: scale(0.97);
 }
 
 .text-size-chip-btn.active,
 .size-chip-btn.active,
-.mode-chip-btn.active {
+.mode-chip-btn.active,
+.marquee-color-btn.active,
+.marquee-speed-btn.active,
+.marquee-pos-btn.active {
   background: var(--acid-lime);
   color: #000000;
   font-weight: 900;
@@ -1653,21 +1670,23 @@ body.theme-light .unified-grip-icon {
 }
 
 /* ==========================================================================
-   FULL-WIDTH BOTTOM SPECTROGRAM DOCK (~1/4 Viewport Height)
+   FULL-WIDTH BOTTOM SPECTROGRAM DOCK (~1/3 Viewport Height)
    ========================================================================== */
 .bottom-spectrogram {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: clamp(120px, 25vh, 260px);
+  height: 33.333vh;
+  height: 33.333dvh;
+  min-height: 160px;
   z-index: 15;
   pointer-events: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.14);
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1894,3 +1913,207 @@ body.theme-light .pill-ch-badge {
   background: #000000;
   color: #ffffff;
 }
+
+/* ==========================================================================
+   DIGITAL LED MARQUEE TICKER ("Farmacia" / Cyber Matrix Ticker)
+   ========================================================================== */
+.marquee-ticker {
+  position: absolute;
+  left: clamp(12px, 2.5vw, 24px);
+  right: clamp(12px, 2.5vw, 24px);
+  height: 40px;
+  z-index: 18;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #060806;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 18%, transparent 19%);
+  background-size: 4px 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --marquee-duration: 25s;
+}
+
+.marquee-ticker.hidden {
+  display: none !important;
+}
+
+body.is-idle .marquee-ticker {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* Positions */
+.marquee-ticker.pos-bottom {
+  bottom: clamp(14px, 2.5vh, 28px);
+  top: auto;
+}
+
+body.has-spectrogram .marquee-ticker.pos-bottom {
+  bottom: calc(33.333vh + 10px);
+  bottom: calc(33.333dvh + 10px);
+}
+
+.marquee-ticker.pos-top {
+  top: clamp(68px, 9vh, 88px);
+  bottom: auto;
+}
+
+/* On mobile when mobile pill is visible and spectrogram is off, keep bottom marquee clear of pill */
+@media (max-width: 820px) {
+  body:not(.has-spectrogram) .marquee-ticker.pos-bottom {
+    bottom: 74px;
+  }
+}
+
+/* Icon & Status Badge */
+.marquee-icon-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.marquee-cross-icon {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  display: inline-block;
+  animation: marqueeCrossGlow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes marqueeCrossGlow {
+  0% { transform: scale(0.92); opacity: 0.65; }
+  100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 6px currentColor); }
+}
+
+.marquee-live-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+/* Viewport & Scrolling Track */
+.marquee-viewport {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 14px, black calc(100% - 14px), transparent 100%);
+}
+
+.marquee-content-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marqueeScroll var(--marquee-duration, 25s) linear infinite;
+}
+
+.marquee-ticker:hover .marquee-content-track {
+  animation-play-state: paused;
+}
+
+.marquee-text-chunk {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-right: 70px;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Color Palettes */
+/* 1. Pharmacy Neon Green */
+.marquee-ticker.color-pharmacy {
+  border: 1.5px solid rgba(0, 255, 102, 0.5);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 255, 102, 0.25);
+  color: #00FF66;
+}
+.marquee-ticker.color-pharmacy .marquee-cross-icon,
+.marquee-ticker.color-pharmacy .marquee-live-label {
+  color: #00FF66;
+}
+.marquee-ticker.color-pharmacy .marquee-text-chunk {
+  color: #00FF66;
+  text-shadow: 0 0 7px rgba(0, 255, 102, 0.75), 0 0 14px rgba(0, 255, 102, 0.35);
+}
+
+/* 2. Theme Reactive */
+.marquee-ticker.color-theme {
+  border: 1.5px solid var(--neon-cyan);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 240, 255, 0.25);
+  color: var(--neon-cyan);
+}
+.marquee-ticker.color-theme .marquee-cross-icon,
+.marquee-ticker.color-theme .marquee-live-label {
+  color: var(--neon-cyan);
+}
+.marquee-ticker.color-theme .marquee-text-chunk {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(0, 240, 255, 0.75);
+}
+
+/* 3. Amber LED */
+.marquee-ticker.color-amber {
+  border: 1.5px solid rgba(255, 176, 0, 0.5);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 176, 0, 0.25);
+  color: #FFB000;
+}
+.marquee-ticker.color-amber .marquee-cross-icon,
+.marquee-ticker.color-amber .marquee-live-label {
+  color: #FFB000;
+}
+.marquee-ticker.color-amber .marquee-text-chunk {
+  color: #FFB000;
+  text-shadow: 0 0 7px rgba(255, 176, 0, 0.75);
+}
+
+/* 4. Cyber Cyan */
+.marquee-ticker.color-cyan {
+  border: 1.5px solid rgba(0, 240, 255, 0.5);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 240, 255, 0.25);
+  color: #00F0FF;
+}
+.marquee-ticker.color-cyan .marquee-cross-icon,
+.marquee-ticker.color-cyan .marquee-live-label {
+  color: #00F0FF;
+}
+.marquee-ticker.color-cyan .marquee-text-chunk {
+  color: #00F0FF;
+  text-shadow: 0 0 7px rgba(0, 240, 255, 0.75);
+}
+
+/* Speeds */
+.marquee-ticker.speed-slow { --marquee-duration: 45s; }
+.marquee-ticker.speed-normal { --marquee-duration: 25s; }
+.marquee-ticker.speed-fast { --marquee-duration: 14s; }
+
+/* Light Theme Overrides for Marquee */
+body.theme-light .marquee-ticker {
+  background-color: #0a0a0a;
+  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+

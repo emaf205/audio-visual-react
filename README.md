@@ -5,12 +5,12 @@
 </p>
 
 > **"Pure geometric architecture in motion. Zero clutter. Instant audio reactivity."**  
-> A high-performance, client-side Web Audio & 2D/3D Canvas engine engineered for live streamers, podcast broadcasts, keynote stages, and generative visual sets. Features 5 bespoke geometric engines, Minimal & Turbo motion profiles, 7 atmospheric palettes (including Swiss Paper White light mode), draggable title & QR stations, mobile 1-tap animation switching, and instant offline PWA capability.
+> A high-performance, client-side Web Audio & 2D/3D Canvas engine engineered for live streamers, podcast broadcasts, keynote stages, and generative visual sets. Features 7 bespoke geometric engines, Minimal & Turbo motion profiles, 7 atmospheric palettes (including Swiss Paper White light mode), draggable title & QR stations, digital LED marquee ticker, mobile 1-tap animation switching, and instant offline PWA capability.
 
 [![Live Web App](https://img.shields.io/badge/Live_App-emanuelebdc.com%2Fideas%2Faudio--visual--react-dfff00?style=for-the-badge&logo=googlechrome&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 [![Ideas Hub](https://img.shields.io/badge/Ideas_Hub-emanuelebdc.com%2Fideas-black?style=for-the-badge&logo=safari&logoColor=white)](https://emanuelebdc.com/ideas/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-emaf205%2Faudio--visual--react-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/emaf205/audio-visual-react)
-[![Version 5.3.0](https://img.shields.io/badge/Version-5.3.0-black?style=for-the-badge)](VERSION.txt)
+[![Version 5.4.0](https://img.shields.io/badge/Version-5.4.0-black?style=for-the-badge)](VERSION.txt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
 [![60 FPS Canvas](https://img.shields.io/badge/Performance-60_FPS-00f0ff?style=for-the-badge&logo=webgl&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 
@@ -41,9 +41,9 @@ I built **AUDIO VISUAL REACT** in Milan to establish a new gold standard for bro
 
 ---
 
-## ✦ The 5 Kinetic Geometric Channels (3D Engines)
+## ✦ The 7 Kinetic Geometric Channels (3D Engines)
 
-Every channel is built on pure geometric mathematics, calculating 3D perspective projections, vertex noise perturbations, and depth sorting in real time:
+Every channel is built on pure geometric mathematics, calculating 3D perspective projections, vertex noise perturbations, polygon face lighting, and depth sorting in real time:
 
 - **CH 01 // 3D GEODESIC SPECTRUM**:
   - **Dual Nested Geodesic Shell**: 42-vertex, 80-face geodesic outer sphere coupled with an internal stellated icosahedron counter-rotating on an inverted phase.
@@ -70,6 +70,16 @@ Every channel is built on pure geometric mathematics, calculating 3D perspective
   - **Audio Terrain Horizon**: 20×16 vector mesh undulating in response to bass and mid-frequency pressure.
   - **Ascending Runic Rings**: Concentric levitating rings climbing and expanding around the obelisk column.
 
+- **CH 06 // 3D POLYHEDRAL STELLATION**:
+  - **Kepler-Poinsot 60-Facet Star Polyhedron**: 60 shaded triangular facets erecting from an icosahedron seed with Lambertian diffuse cosine shading $\mathbf{N} \cdot \mathbf{L}$ and specular highlights.
+  - **Dynamic Audio Stellation Extrusion**: Radial stellation spikes bursting dynamically with bass and high-frequency audio transients.
+  - **Kinetic Deep Nebula Background**: Concentric 12-sided acoustic shockwave ripples rippling behind 28 drifting 3D micro-crystals.
+
+- **CH 07 // 3D CYBER HELIX LATTICE**:
+  - **Monumental Double-Helical Macromolecule**: 38-level helical superstructure with dual continuous ribbon backbones and diamond junction nodes.
+  - **3D Polygonal Equalizer Rungs**: Horizontal cross-struts functioning as a vertical spectrum VU-meter, illuminating with neon and specular emission in response to frequency bins.
+  - **Atmospheric Cyber Atrium**: Undulating 3D perspective floor and ceiling vector meshes receding into infinite distance with vertical data conduit beams.
+
 ---
 
 ## ✦ Studio Stations & Broadcast Controls
@@ -87,16 +97,21 @@ Every channel is built on pure geometric mathematics, calculating 3D perspective
   - Instant client-side QR Code generation with custom target link (`emanuelebdc.com` default).
   - Optional action CTA badge (*SCAN TO CONNECT*) and secondary URL text label.
   - Quick S / M / L size cycling by clicking the corner resize badge.
-- **Station 4: Unified Vertical Dock (Stack Mode)**:
+- **Station 4: Digital LED Marquee Ticker ("Farmacia" Style)**:
+  - Customizable scrolling LED digital ticker floating across the screen above animations.
+  - Color palettes: **Pharmacy Green** `✚`, **Theme Reactive** `⚡`, **Amber LED** `●`, **Cyber Cyan** `◈`.
+  - Speed presets: Slow (45s), Normal (25s), Fast (14s).
+  - Top or bottom positioning with automatic clearance above the spectrogram dock.
+- **Station 5: Unified Vertical Dock (Stack Mode)**:
   - Dock all chosen stations (Title, Clock, Media) into a single vertical movable card.
   - Drag the entire column together as one unit or toggle off to float them separately.
-- **Station 5: Bottom Spectrogram Dock**:
-  - 1/4 screen height frequency analyzer featuring 72 precision audio bars with gradient fills and peak pip retention.
+- **Station 6: Bottom Spectrogram Dock (1/3 Viewport Height)**:
+  - Generous 1/3 screen height frequency analyzer featuring 72 precision audio bars with gradient fills and peak pip retention.
   - Real-time frequency axis labels (32Hz to 16kHz).
-- **Station 4: Motion Profiles (Minimal vs. Turbo)**:
+- **Motion Profiles (Minimal vs. Turbo)**:
   - **Minimal**: Calibrated for keynote speeches, live interviews, and distraction-free webcam backdrops. Crisp vector lines and serene motion.
   - **Turbo**: High-energy broadcast mode with particle sparks, warp speed, and explosive transient spikes.
-- **Station 5: 7 Curated Atmospheric Palettes**:
+- **7 Curated Atmospheric Palettes**:
   - **Cobalt Horizon**: Electric Cyan `#00F0FF` + Cobalt Blue `#0072FF` on Deep Obsidian Slate.
   - **Campari Nocturne**: Intense Campari Red `#FF1A35` + Radiant Amber `#FF7A00` on Roasted Crimson.
   - **Emerald Cyber**: Acid Lime `#00FF88` + Matrix Mint `#00E5FF` on Cyber Pine.
@@ -113,7 +128,7 @@ Designed from the ground up for mobile broadcasting and instant smartphone opera
 
 1. **Floating Mobile Scene Pill**:
    - Ergonomic capsule pinned at bottom-left with touch target > 44px.
-   - Shows active channel badge (`01-05`), uppercase scene title, and prev/next touch arrows (`‹` / `›`).
+   - Shows active channel badge (`01-07`), uppercase scene title, and prev/next touch arrows (`‹` / `›`).
 2. **Direct Background Tap**:
    - Tap anywhere on the open 3D canvas background (< 15px movement, < 350ms duration) to advance to the next geometric scene instantly.
 3. **Swipe Gestures**:
@@ -128,12 +143,13 @@ Designed from the ground up for mobile broadcasting and instant smartphone opera
 
 | Key | Action | Details |
 |:---:|---|---|
-| <kbd>1</kbd> – <kbd>5</kbd> | **Direct Scene Select** | Lock directly into channels 01 through 05 |
+| <kbd>1</kbd> – <kbd>7</kbd> | **Direct Scene Select** | Lock directly into channels 01 through 07 |
 | <kbd>→</kbd> / <kbd>↓</kbd> | **Next Scene** | Advance to next 3D geometric engine |
 | <kbd>←</kbd> / <kbd>↑</kbd> | **Previous Scene** | Cycle backward through scenes |
 | <kbd>Space</kbd> | **Next Atmosphere Palette** | Cycle through the 7 curated color themes |
 | <kbd>R</kbd> | **Randomize & Auto-Rotate** | Pick a random scene & theme, resume auto-rotation |
-| <kbd>S</kbd> | **Toggle Spectrogram** | Show / hide the 1/4 screen bottom frequency dock |
+| <kbd>T</kbd> | **Toggle Marquee Ticker** | Show / hide the digital LED marquee ticker tape |
+| <kbd>S</kbd> | **Toggle Spectrogram** | Show / hide the 1/3 screen bottom frequency dock |
 | <kbd>M</kbd> | **Mute / Unmute Microphone** | Toggle microphone input stream |
 | <kbd>F</kbd> | **Toggle Fullscreen** | Expand to edge-to-edge broadcast display |
 | <kbd>H</kbd> | **Zero-HUD Mode** | Hide all cards, pills, and buttons for clean capture |

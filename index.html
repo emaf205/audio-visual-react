@@ -18,13 +18,13 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AUDIO VISUAL REACT — 3D Geometric Audio-Reactive Studio Visualizer">
-  <meta name="twitter:description" content="Fullscreen 3D geometric audio visualizer, live stream overlay & stage backdrop with 5 geometric engines, Minimal & Turbo modes, and offline PWA capability.">
+  <meta name="twitter:description" content="Fullscreen 3D geometric audio visualizer, live stream overlay & stage backdrop with 7 geometric engines, Minimal & Turbo modes, and offline PWA capability.">
   <meta name="twitter:image" content="https://emanuelebdc.com/ideas/audio-visual-react/assets/og-cover.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=530">
+  <link rel="stylesheet" href="style.css?v=540">
 </head>
 <body>
 
@@ -99,6 +99,20 @@
         <div class="unified-slot" data-slot="title"></div>
         <div class="unified-slot" data-slot="clock"></div>
         <div class="unified-slot" data-slot="media"></div>
+      </div>
+    </div>
+
+    <!-- Digital LED Marquee Ticker ("Farmacia" / Cyber Matrix Ticker) -->
+    <div id="marquee-ticker" class="marquee-ticker hidden pos-bottom color-pharmacy">
+      <div class="marquee-icon-badge">
+        <span class="marquee-cross-icon">✚</span>
+        <span class="marquee-live-label">LIVE TICKER</span>
+      </div>
+      <div class="marquee-viewport">
+        <div class="marquee-content-track" id="marquee-track">
+          <span class="marquee-text-chunk" id="marquee-text-chunk-1">+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++</span>
+          <span class="marquee-text-chunk" id="marquee-text-chunk-2">+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++</span>
+        </div>
       </div>
     </div>
 
@@ -208,6 +222,14 @@
               <span class="scene-num">05</span>
               <span class="scene-title">MONOLITH</span>
             </button>
+            <button type="button" class="scene-select-btn" data-scene="5">
+              <span class="scene-num">06</span>
+              <span class="scene-title">STELLATION</span>
+            </button>
+            <button type="button" class="scene-select-btn" data-scene="6">
+              <span class="scene-num">07</span>
+              <span class="scene-title">CYBER HELIX</span>
+            </button>
           </div>
 
           <!-- Style: Minimal vs Turbo -->
@@ -289,7 +311,7 @@
           <div class="ios-row-item huge-toggle-row">
             <div>
               <div class="ios-row-title">SPECTROGRAM</div>
-              <div class="ios-sublabel">Bottom 1/4 audiogram dock</div>
+              <div class="ios-sublabel">Bottom 1/3 audiogram dock</div>
             </div>
             <label class="toggle-switch">
               <input id="toggle-spectrogram" type="checkbox">
@@ -501,6 +523,53 @@
           </div>
         </div>
 
+        <!-- 8. Digital LED Marquee Ticker ("Farmacia" Style) -->
+        <div class="ios-card-group">
+          <div class="ios-group-header">
+            <span class="ios-group-title">DIGITAL LED MARQUEE</span>
+            <label class="toggle-switch">
+              <input id="toggle-marquee" type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ios-group-body" id="group-marquee-body">
+            <div class="ios-row-item-col">
+              <span class="ios-sublabel">TICKER TEXT</span>
+              <textarea id="input-marquee-text" class="form-input form-textarea ios-input" rows="2" placeholder="Ticker text..." maxlength="200">+++ EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES // LIVE BROADCAST +++</textarea>
+            </div>
+
+            <!-- LED Color Palette -->
+            <div class="ios-row-item-col" style="margin-top: 8px;">
+              <span class="ios-sublabel">LED COLOR</span>
+              <div class="huge-segmented-control" id="marquee-color-control">
+                <button type="button" class="marquee-color-btn active" data-color="pharmacy">✚ GREEN</button>
+                <button type="button" class="marquee-color-btn" data-color="theme">⚡ THEME</button>
+                <button type="button" class="marquee-color-btn" data-color="amber">● AMBER</button>
+                <button type="button" class="marquee-color-btn" data-color="cyan">◈ CYAN</button>
+              </div>
+            </div>
+
+            <!-- Scroll Speed -->
+            <div class="ios-row-item-col" style="margin-top: 8px;">
+              <span class="ios-sublabel">SCROLL SPEED</span>
+              <div class="huge-segmented-control" id="marquee-speed-control">
+                <button type="button" class="marquee-speed-btn" data-speed="slow">SLOW</button>
+                <button type="button" class="marquee-speed-btn active" data-speed="normal">NORMAL</button>
+                <button type="button" class="marquee-speed-btn" data-speed="fast">FAST</button>
+              </div>
+            </div>
+
+            <!-- Screen Position -->
+            <div class="ios-row-item-col" style="margin-top: 8px;">
+              <span class="ios-sublabel">POSITION</span>
+              <div class="huge-segmented-control" id="marquee-pos-control">
+                <button type="button" class="marquee-pos-btn active" data-pos="bottom">BOTTOM</button>
+                <button type="button" class="marquee-pos-btn" data-pos="top">TOP</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Reset Layout Button -->
@@ -515,8 +584,8 @@
     </div>
   </div>
 
-  <script src="qrcode.min.js?v=530"></script>
-  <script src="visuals.js?v=530"></script>
-  <script src="app.js?v=530"></script>
+  <script src="qrcode.min.js?v=540"></script>
+  <script src="visuals.js?v=540"></script>
+  <script src="app.js?v=540"></script>
 </body>
 </html>
