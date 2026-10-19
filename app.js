@@ -138,6 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPwaDismiss = document.getElementById('btn-pwa-dismiss');
   let deferredPrompt = null;
 
+  // Mobile Quick-Tap Scene Pill Elements
+  const mobileScenePill = document.getElementById('mobile-scene-pill');
+  const btnMobilePrevScene = document.getElementById('btn-mobile-prev-scene');
+  const btnMobileCurrScene = document.getElementById('btn-mobile-curr-scene');
+  const btnMobileNextScene = document.getElementById('btn-mobile-next-scene');
+  const pillChBadge = document.querySelector('.pill-ch-badge');
+  const pillSceneTitle = document.querySelector('.pill-scene-title');
+
   // Defaults
   const DEFAULT_TEXT = "EMANUELE BDC // ARTIFICIAL INTELLIGENCE DIALOGUES";
   const DEFAULT_QR_URL = "https://emanuelebdc.com";
@@ -628,15 +636,98 @@ document.addEventListener('DOMContentLoaded', () => {
   makeDraggable(mediaCard, 'media');
 
   // --- 6. 3D SCENE CONTROLS (5 Channels) ---
+  const SHORT_SCENE_NAMES = ['GEODESIC', 'TESSERACT', 'WARP', 'SYNCHRO', 'MONOLITH'];
+
   function updateSceneUI(scene, notify = true) {
-    if (activeSceneName) activeSceneName.textContent = scene.name.replace(/^CH \d+ \/\/ /, '');
+    const rawName = scene.name.replace(/^CH \d+ \/\/ /, '');
+    if (activeSceneName) activeSceneName.textContent = rawName;
     if (sceneSelectBtns) {
       sceneSelectBtns.forEach((btn, idx) => {
         btn.classList.toggle('active', idx === engine.currentScene);
       });
     }
-    if (notify) showToast(`SCENE: ${scene.name.replace(/^CH \d+ \/\/ /, '')}`);
+
+    if (pillChBadge) {
+      pillChBadge.textContent = String(engine.currentScene + 1).padStart(2, '0');
+    }
+    if (pillSceneTitle) {
+      pillSceneTitle.textContent = SHORT_SCENE_NAMES[engine.currentScene] || rawName;
+    }
+
+    if (notify) showToast(`SCENE: ${rawName}`);
   }
+
+  function triggerNextScene() {
+    if (navigator.vibrate) navigator.vibrate(12);
+    const sc = engine.nextScene();
+    updateSceneUI(sc, true);
+  }
+
+  function triggerPrevScene() {
+    if (navigator.vibrate) navigator.vibrate(12);
+    const sc = engine.prevScene();
+    updateSceneUI(sc, true);
+  }
+
+  // Mobile Pill Quick-Tap Listeners
+  if (btnMobileCurrScene) {
+    btnMobileCurrScene.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerNextScene();
+    });
+  }
+
+  if (btnMobileNextScene) {
+    btnMobileNextScene.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerNextScene();
+    });
+  }
+
+  if (btnMobilePrevScene) {
+    btnMobilePrevScene.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerPrevScene();
+    });
+  }
+
+  // Direct Mobile Tap & Swipe on Canvas (1-Tap Animation Switching)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = performance.now();
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', (e) => {
+    if (isDrawerOpen) return;
+    if (e.changedTouches.length === 1) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+      const dt = performance.now() - touchStartTime;
+      const dist = Math.hypot(dx, dy);
+
+      // Clean Quick Tap on background (< 15px movement, < 350ms duration)
+      if (dist < 15 && dt < 350) {
+        triggerNextScene();
+      }
+      // Horizontal swipe to cycle forward (swipe left)
+      else if (dx < -50 && Math.abs(dy) < 60 && dt < 450) {
+        triggerNextScene();
+      }
+      // Horizontal swipe to cycle backward (swipe right)
+      else if (dx > 50 && Math.abs(dy) < 60 && dt < 450) {
+        triggerPrevScene();
+      }
+    }
+  }, { passive: true });
 
   function startAutoRotation() {
     clearInterval(autoRotateTimer);
