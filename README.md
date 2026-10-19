@@ -1,113 +1,181 @@
-# AUDIO VISUAL REACT — 3D Geometric Audio-Reactive Studio Visualizer (v5.0.0)
+# AUDIO VISUAL REACT — 3D Geometric Audio-Reactive Studio Visualizer & Stage Backdrop
 
-[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-emanuelebdc.com%2Fideas%2Faudio--visual--react-00F0FF?style=for-the-badge&logo=googlechrome&logoColor=black)](https://emanuelebdc.com/ideas/audio-visual-react/)
-[![Ideas Hub](https://img.shields.io/badge/IDEAS%20HUB-emanuelebdc.com%2Fideas-CCFF00?style=for-the-badge&logoColor=black)](https://emanuelebdc.com/ideas/)
-[![PWA Ready](https://img.shields.io/badge/PWA-OFFLINE%20READY-white?style=for-the-badge&logo=pwa&logoColor=black)](https://emanuelebdc.com/ideas/audio-visual-react/)
+<p align="center">
+  <img src="screenshots/desktop.png" alt="Audio Visual React Studio Desktop Interface" width="100%">
+</p>
 
-> 🚀 **Live Online App**: [https://emanuelebdc.com/ideas/audio-visual-react/](https://emanuelebdc.com/ideas/audio-visual-react/)  
-> 🌐 **EmaF205 Ideas Hub**: [https://emanuelebdc.com/ideas/](https://emanuelebdc.com/ideas/)  
->
-> **Fullscreen audio-reactive studio visualizer and stage backdrop featuring 5 monumental 3D geometric engines, Minimal and Turbo motion dynamics, 7 curated non-black atmospheric palettes (including Swiss Paper White light mode), customizable speaker profile card, QR station with optional CTA/URL badges, full-width bottom spectrogram, and instant PWA offline support.**  
-> Designed and engineered by **Emanuele BDC (EmaF205)**.
+> **"Pure geometric architecture in motion. Zero clutter. Instant audio reactivity."**  
+> A high-performance, client-side Web Audio & 2D/3D Canvas engine engineered for live streamers, podcast broadcasts, keynote stages, and generative visual sets. Features 5 bespoke geometric engines, Minimal & Turbo motion profiles, 7 atmospheric palettes (including Swiss Paper White light mode), draggable title & QR stations, mobile 1-tap animation switching, and instant offline PWA capability.
 
----
-
-## 5 Pure 3D Geometric Engines
-
-1. **CH 01 // 3D GEODESIC SPECTRUM (Nested Dual Lattice & Triple-Axis Gyroscope)**:
-   - **Hyperbolic Outer Shell**: 42-vertex, 80-face geodesic polyhedron with multi-octave pseudo-noise harmonic turbulence per vertex;
-   - **Counter-Rotating Stellated Inner Core**: 12-vertex, 30-edge stellated icosahedron counter-rotating with high geometric density;
-   - **Quantum Tension Struts**: Connecting internal and external nodes with audio-reactive travelling photon packets;
-   - **Tactical Triple-Axis Gyroscope (Triple Gimbal)**: Equatorial ring with Vernier tick marks and orbital satellites, counter-rotating meridian ring, and zenithal fork polar ring;
-   - **Keplerian Quantum Swarm**: 48 micro-nodes orbiting along eccentric 3D elliptical trajectories with depth sorting and starlight flares.
-
-2. **CH 02 // 3D HYPER TESSERACT (4D Hypercube with Volumetric Facets & Shockwaves)**:
-   - 4D stereographic projection with simultaneous rotation across $XW$, $YZ$, $ZW$, and $XY$ planes;
-   - **Volumetric Translucent Facets**: Shaded polygonal planes giving authentic 3D mass and depth to the hypercube;
-   - **Octagonal Concentric Shockwaves**: Triggered dynamically by acoustic transients and bass drum kicks;
-   - Dynamic laser struts and glowing diamond vertices.
-
-3. **CH 03 // 3D CYBER WARP TUNNEL (Decagonal Tunnel with Curved Flight & Cross-Trusses)**:
-   - **Non-Linear 3D Flight Trajectory (Wandering Wormhole)**: Continuous pitch, yaw, and roll driven by Lissajous harmonic functions;
-   - **32 Decagonal Structural Rings**: Extending from 30 to 1600 units depth with reinforced bulkheads every 6 rings;
-   - **Cross-Truss Lattice (`/\/\/\`)**: Aerospace-grade load-bearing diagonal trussing between adjacent rings;
-   - **Inner Hexagonal Energy Conduit**: Counter-rotating core emitting relativistic particles through the wormhole center;
-   - **Relativistic Warp Streaks**: 140 star particles stretching into light streaks as vocal energy intensifies;
-   - **Tactical Flight Horizon Reticle**: Pitch ladder, roll bank angle, and vanishing point diamond.
-
-4. **CH 04 // 3D QUANTUM SYNCHROTRON (Tri-Toroidal Relativistic Accelerator)**:
-   - Three interlocked toroidal particle accelerators orbiting along mutually inclined relativistic planes;
-   - 54 relativistic photon flux particles looping through toroidal coordinates with velocity modulated by audio frequencies;
-   - Central singularity beacon radiating radial light rays and high-frequency corona discharge.
-
-5. **CH 05 // 3D MATRIX MONOLITH (Brutalist Obelisk & 3D Audio Terrain Mesh)**:
-   - Brutalist monolith obelisk hovering with subtle gravitational levitation;
-   - 20×16 terrain horizon grid deformed by real-time audio FFT frequency bins;
-   - Five ascending runic energy rings encircling the monolith.
+[![Live Web App](https://img.shields.io/badge/Live_App-emanuelebdc.com%2Fideas%2Faudio--visual--react-dfff00?style=for-the-badge&logo=googlechrome&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
+[![Ideas Hub](https://img.shields.io/badge/Ideas_Hub-emanuelebdc.com%2Fideas-black?style=for-the-badge&logo=safari&logoColor=white)](https://emanuelebdc.com/ideas/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-emaf205%2Faudio--visual--react-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/emaf205/audio-visual-react)
+[![Version 5.2.1](https://img.shields.io/badge/Version-5.2.1-black?style=for-the-badge)](VERSION.txt)
+[![License: MIT](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)](LICENSE)
+[![60 FPS Canvas](https://img.shields.io/badge/Performance-60_FPS-00f0ff?style=for-the-badge&logo=webgl&logoColor=000000)](https://emanuelebdc.com/ideas/audio-visual-react/)
 
 ---
 
-## Motion Dynamics: Minimal vs Turbo
+## ✦ The Genesis & Why This Exists
 
-- **MINIMAL**: Serene, architectural vector wireframes, pure geometric contours, and subdued reactivity designed for calm keynote presentations, interviews, and distraction-free live streaming.
-- **TURBO**: Dense, multi-layered kinetic power, particle swarms, relativistic warp streaks, and high-frequency impulse sparks designed for podcasts, electronic music, and energetic broadcasts.
+Most audio visualizers and live streaming overlays on the web suffer from two fatal extremes:
+1. **The Over-Engineered Blob**: Bloated GPU shaders that drown the screen in blurry neon soup, melting laptop CPUs and obscuring speaker facial feeds.
+2. **The Generic Spectrum Bar**: Plain, sterile 2D frequency bars that look like an audio editor from 2004.
 
----
+When broadcasting a podcast, delivering a keynote, or performing live, you need **architectural authority**. You need graphics that feel like high-end Swiss kinetic poster design: crisp geometric wireframes, mathematically precise rotations, high-contrast typography, and tactile control stations that you can freely reposition across the frame.
 
-## 7 Curated Atmospheric Palettes (Non-Black & Light Mode)
-
-1. **COBALT HORIZON**: Electric Cyan `#00F0FF` + Cobalt Blue `#0072FF` on Deep Obsidian Slate.
-2. **CAMPARI NOCTURNE**: Intense Campari Red `#FF1A35` + Radiant Amber `#FF7A00` on Roasted Crimson.
-3. **EMERALD SANCTUARY**: Laser Mint `#00FF88` + Matrix Jade `#00A86B` on Deep Forest Abyss.
-4. **ELECTRIC INDIGO**: Hyper Violet `#B347FF` + Acid Magenta `#FF007F` on Midnight Purple.
-5. **SOLAR TITANIUM**: Warm Titanium `#FFF8E7` + Hyper Solar Amber `#FF9100` on Roasted Mocha.
-6. **SWISS PAPER WHITE (Light Mode)**: Architectural Indian Ink `#0A0A0A` + Bauhaus Red `#E63946` on Warm Museum Paper `#F5F2EB`.
-7. **ACID OBSIDIAN**: Acid Lime `#CCFF00` + Optic White `#FFFFFF` on Deep Pitch Slate.
+I built **AUDIO VISUAL REACT** in Milan to establish a new gold standard for browser-native broadcast visuals. It runs at a locked **60 FPS** on pure Canvas 2D without Three.js or heavy 3D engine bloat, listens dynamically to your microphone via the Web Audio API, and stores your entire layout, avatar, and QR codes locally with zero server dependencies.
 
 ---
 
-## Overlay Stations
+## ✦ Live Interface & Visual Showcase
 
-### Station 1: Title & Profile Card
-- **Monumental Typography**: Displays title, speaker name, or topic in discrete **S**, **M**, or **L** sizes.
-- **Integrated Profile Photo Badge**: Optional avatar docked beside the title for host identification.
-- **Draggable & Persistent**: Freely repositionable with spring settling and saved coordinates.
+<p align="center">
+  <img src="screenshots/desktop.png" alt="Desktop Studio Layout with 3D Geodesic Spectrum and Draggable Stations" width="68%">
+  <img src="screenshots/mobile.png" alt="Mobile Viewport with 1-Tap Scene Switcher Pill" width="28%">
+</p>
 
-### Station 2: QR & Media Card
-- **Dual Mode**: Instant scannable QR code generator or uploaded device photo.
-- **3 Discrete Sizes**: **S** (compact), **M** (standard), **L** (monumental).
-- **Optional CTA Badge**: Customizable label (e.g., `SCAN TO CONNECT`).
-- **Optional URL Label**: Displays destination domain clearly.
-
-### Bottom Audiogram Dock (Optional 1/4 Viewport)
-- Full-width 72-band frequency spectrogram across the bottom of the screen with labeled frequency axis (32Hz to 16kHz).
+<p align="center">
+  <img src="screenshots/drawer.png" alt="Studio Controls iOS Drawer with Bold Buttons and Palette Selectors" width="100%">
+</p>
 
 ---
 
-## Keyboard Shortcuts
+## ✦ The 5 Kinetic Geometric Channels (3D Engines)
 
-| Key | Action |
-|---|---|
-| `1` – `5` | Select and lock scene (`Geodesic`, `Tesseract`, `Tunnel`, `Synchrotron`, `Monolith`) |
-| `R` | Resume Auto-Rotation & Randomize |
-| `Space` | Cycle Atmospheric Palette |
-| `S` | Toggle Bottom Spectrogram (1/4 screen) |
-| `M` | Toggle Microphone (Active / Muted) |
-| `F` | Toggle Fullscreen |
-| `H` | Zero-HUD Mode (clean recording without overlays or buttons) |
-| `Esc` | Close Settings Drawer / Exit Fullscreen |
+Every channel is built on pure geometric mathematics, calculating 3D perspective projections, vertex noise perturbations, and depth sorting in real time:
+
+- **CH 01 // 3D GEODESIC SPECTRUM**:
+  - **Dual Nested Geodesic Shell**: 42-vertex, 80-face geodesic outer sphere coupled with an internal stellated icosahedron counter-rotating on an inverted phase.
+  - **Triple-Axis Gimbal Gyroscope**: Equatorial Vernier tick-ring, meridian counter-ring, and polar zenith fork reacting to vocal resonance.
+  - **Keplerian Particle Swarm**: 48 micro-nodes orbiting along eccentric 3D Keplerian ellipses with starlight flare intensity.
+
+- **CH 02 // 3D HYPER TESSERACT**:
+  - **4D Hypercube Projection**: 4D-to-3D isometric projection executing simultaneous rotation across $XW$, $YZ$, $ZW$, and $XY$ coordinate planes.
+  - **Volumetric Translucent Facets**: Shaded polygonal planes providing tangible volumetric mass.
+  - **Acoustic Shockwave Rings**: Concentric octagonal ripples detonated by bass transients and percussive vocal attacks.
+
+- **CH 03 // 3D CYBER WARP TUNNEL**:
+  - **Wandering Wormhole Flight**: Continuous 3D pitch, yaw, and roll navigation driven by Lissajous harmonic curves.
+  - **32 Decagonal Structural Rings**: Ranging from 30 to 1600 units depth with reinforced bulkheads and aerospace cross-truss lattice (`/\/\/\`).
+  - **Relativistic Warp Streaks**: 140 star particles stretching into hyper-speed lines as vocal intensity increases.
+
+- **CH 04 // 3D QUANTUM SYNCHROTRON**:
+  - **Tri-Toroidal Particle Accelerator**: Three interlocked relativistic rings rotating along mutually inclined magnetic planes.
+  - **Relativistic Photon Packets**: 54 energy particles orbiting at frequencies modulated by real-time audio FFT bins.
+  - **Central Singularity Beacon**: Pulsing core emitting radial corona discharge spikes.
+
+- **CH 05 // 3D MATRIX MONOLITH**:
+  - **Brutalist Obelisk**: Towering geometric monolith hovering in gravitational levitation.
+  - **Audio Terrain Horizon**: 20×16 vector mesh undulating in response to bass and mid-frequency pressure.
+  - **Ascending Runic Rings**: Concentric levitating rings climbing and expanding around the obelisk column.
 
 ---
 
-## PWA & Offline Support
+## ✦ Studio Stations & Broadcast Controls
 
-- **Progressive Web App**: Fully functional offline via `service-worker.js`.
-- **Install Prompt**: Native-feeling in-app banner on Chromium browsers; guided prompt on iOS Safari.
-- **Responsive Ergonomics**: Tailored for both desktop 16:9 displays and mobile vertical viewports.
+- **Station 1: Dynamic Speaker Card & Profile Avatar**:
+  - Draggable anywhere on the canvas with spring settling.
+  - Toggleable circular profile photo badge (upload custom file or paste image URL).
+  - Modular S / M / L typography scales with tight Swiss tracking.
+- **Station 2: Scalable QR & Media Hub**:
+  - Instant client-side QR Code generation with custom target link (`emanuelebdc.com` default).
+  - Optional action CTA badge (*SCAN TO CONNECT*) and secondary URL text label.
+  - Switchable to custom image showcase mode.
+  - Quick S / M / L size cycling by clicking the corner resize badge.
+- **Station 3: Bottom Spectrogram Dock**:
+  - 1/4 screen height frequency analyzer featuring 72 precision audio bars with gradient fills and peak pip retention.
+  - Real-time frequency axis labels (32Hz to 16kHz).
+- **Station 4: Motion Profiles (Minimal vs. Turbo)**:
+  - **Minimal**: Calibrated for keynote speeches, live interviews, and distraction-free webcam backdrops. Crisp vector lines and serene motion.
+  - **Turbo**: High-energy broadcast mode with particle sparks, warp speed, and explosive transient spikes.
+- **Station 5: 7 Curated Atmospheric Palettes**:
+  - **Cobalt Horizon**: Electric Cyan `#00F0FF` + Cobalt Blue `#0072FF` on Deep Obsidian Slate.
+  - **Campari Nocturne**: Intense Campari Red `#FF1A35` + Radiant Amber `#FF7A00` on Roasted Crimson.
+  - **Emerald Cyber**: Acid Lime `#00FF88` + Matrix Mint `#00E5FF` on Cyber Pine.
+  - **Ultra Violet**: Toxic Violet `#CC00FF` + Electric Magenta `#FF0066` on Deep Void.
+  - **Amber Gold**: Pure Gold `#FFD700` + Warm Bronze `#FF8800` on Carbon Graphite.
+  - **Mono Ice**: Optical White `#FFFFFF` + Subdued Platinum `#888888` on Deep Black.
+  - **Swiss Paper White (Light Mode)**: Pure Architectural Black `#000000` line art on Warm Swiss Paper `#F8F8F6` with subtle dark gridlines.
 
 ---
 
-## License & Credits
+## ✦ Mobile 1-Tap Ergonomics & Touch Gestures
 
-Designed and engineered by **Emanuele BDC (EmaF205)** — [emanuelebdc.com](https://emanuelebdc.com)  
-Pure client-side HTML5 / ES6 Canvas 2D & Web Audio API. Zero external runtime dependencies.
+Designed from the ground up for mobile broadcasting and instant smartphone operation:
+
+1. **Floating Mobile Scene Pill**:
+   - Ergonomic capsule pinned at bottom-left with touch target > 44px.
+   - Shows active channel badge (`01-05`), uppercase scene title, and prev/next touch arrows (`‹` / `›`).
+2. **Direct Background Tap**:
+   - Tap anywhere on the open 3D canvas background (< 15px movement, < 350ms duration) to advance to the next geometric scene instantly.
+3. **Swipe Gestures**:
+   - Swipe Left: Next scene (`engine.nextScene()`).
+   - Swipe Right: Previous scene (`engine.prevScene()`).
+4. **Haptic Feedback**:
+   - Integrated `navigator.vibrate(12)` provides a crisp tactile click on supported mobile devices.
+
+---
+
+## ✦ Complete Keyboard Shortcuts Matrix
+
+| Key | Action | Details |
+|:---:|---|---|
+| <kbd>1</kbd> – <kbd>5</kbd> | **Direct Scene Select** | Lock directly into channels 01 through 05 |
+| <kbd>→</kbd> / <kbd>↓</kbd> | **Next Scene** | Advance to next 3D geometric engine |
+| <kbd>←</kbd> / <kbd>↑</kbd> | **Previous Scene** | Cycle backward through scenes |
+| <kbd>Space</kbd> | **Next Atmosphere Palette** | Cycle through the 7 curated color themes |
+| <kbd>R</kbd> | **Randomize & Auto-Rotate** | Pick a random scene & theme, resume auto-rotation |
+| <kbd>S</kbd> | **Toggle Spectrogram** | Show / hide the 1/4 screen bottom frequency dock |
+| <kbd>M</kbd> | **Mute / Unmute Microphone** | Toggle microphone input stream |
+| <kbd>F</kbd> | **Toggle Fullscreen** | Expand to edge-to-edge broadcast display |
+| <kbd>H</kbd> | **Zero-HUD Mode** | Hide all cards, pills, and buttons for clean capture |
+| <kbd>Esc</kbd> | **Close Drawer / Exit Fullscreen** | Restore focus and dismiss active overlay |
+
+---
+
+## ✦ Technical Highlights & Architecture
+
+```text
+audio-visual-react/
+├── index.html           # Semantic HTML5 stage layout & ARIA dialog drawer
+├── style.css            # Swiss Total Bold design system, 100dvh, :focus-visible
+├── visuals.js           # 5 Pure 3D geometric Canvas engines (zero external 3D libs)
+├── app.js               # Web Audio API graph, safeStorageSet, touch & keyboard loop
+├── qrcode.min.js        # Bundled zero-dependency offline QR code generator
+├── manifest.webmanifest # PWA configuration (standalone, display-override)
+├── service-worker.js    # Resilient cache-busting offline asset caching
+├── VERSION.txt          # Semantic version tracker (v5.2.1)
+├── CHANGELOG.md         # Comprehensive release notes
+├── project.txt          # Ideas Hub metadata and classification
+└── screenshots/         # High-resolution desktop and mobile previews
+```
+
+- **Pure Vanilla Web Standards**: Zero React, zero Vue, zero Three.js bloat. Pure ES6+ modern modules.
+- **Web Audio API Real-Time Graph**: Fast Fourier Transform (`fftSize: 512`, `smoothingTimeConstant: 0.8`) with RMS volume calculation and split frequency energy bins (Bass, Mid, High).
+- **Storage Resilience**: All client configuration writes use `safeStorageSet` to prevent unhandled `QuotaExceededError` or data corruption crashes.
+- **WCAG AA Compliance**: Full keyboard focus trap on settings drawer, `:focus-visible` high-contrast focus rings, and semantic ARIA labeling on all icon controls.
+
+---
+
+## ✦ Quickstart & Offline Execution
+
+```bash
+# Clone the repository
+git clone https://github.com/emaf205/audio-visual-react.git
+cd audio-visual-react
+
+# Start any local HTTP server
+python3 -m http.server 8080
+```
+
+Open [http://localhost:8080](http://localhost:8080) in Chrome, Safari, or Edge. Click **Enable Microphone** or click anywhere on the canvas to activate the audio context.
+
+---
+
+## ✦ Author & Credits
+
+Designed and engineered by **[Emanuele BDC](https://emaf205.com)** in Milan.  
+Published on the **[EmaF205 Ideas Hub](https://emanuelebdc.com/ideas/)**.
+
+Distributed under the **MIT License**. Free for personal broadcasts, commercial live streams, and creative performances.
