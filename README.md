@@ -1,7 +1,7 @@
 # AUDIO VISUAL REACT — 3D Geometric Audio-Reactive Studio Visualizer & Stage Backdrop
 
 <p align="center">
-  <img src="screenshots/desktop.png" alt="Audio Visual React Studio Desktop Interface" width="100%">
+  <img src="og-cover.jpg" alt="Audio Visual React Social Cover Artwork" width="100%">
 </p>
 
 > **"Pure geometric architecture in motion. Zero clutter. Instant audio reactivity."**  

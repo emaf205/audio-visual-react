@@ -20,5 +20,21 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/desktop.png",
+      "sizes": "1440x900",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Audio Visual React Desktop Studio 3D Canvas"
+    },
+    {
+      "src": "screenshots/mobile.png",
+      "sizes": "500x669",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Audio Visual React Mobile 1-Tap Scene Switcher"
+    }
   ]
 }
