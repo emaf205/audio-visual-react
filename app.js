@@ -1408,25 +1408,35 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener(evt, resetIdle, { passive: true });
   });
 
+  let drawerFocusTimeout = null;
+
   function openDrawer() {
     isDrawerOpen = true;
-    lastFocusedElement = document.activeElement;
+    lastFocusedElement = (document.activeElement && document.activeElement !== document.body) ? document.activeElement : menuFab;
     document.body.classList.remove('is-idle');
     if (idleTimer) clearTimeout(idleTimer);
     settingsDrawer.classList.remove('hidden');
     if (menuFab) menuFab.setAttribute('aria-expanded', 'true');
+    if (drawerFocusTimeout) clearTimeout(drawerFocusTimeout);
     if (settingsCloseBtn) {
-      setTimeout(() => settingsCloseBtn.focus(), 60);
+      drawerFocusTimeout = setTimeout(() => {
+        if (isDrawerOpen) settingsCloseBtn.focus();
+      }, 50);
     }
   }
 
   function closeDrawer() {
+    if (drawerFocusTimeout) {
+      clearTimeout(drawerFocusTimeout);
+      drawerFocusTimeout = null;
+    }
     isDrawerOpen = false;
     settingsDrawer.classList.add('hidden');
     if (menuFab) menuFab.setAttribute('aria-expanded', 'false');
     resetIdle();
-    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-      lastFocusedElement.focus();
+    const targetToFocus = (lastFocusedElement && lastFocusedElement !== document.body) ? lastFocusedElement : menuFab;
+    if (targetToFocus && typeof targetToFocus.focus === 'function') {
+      targetToFocus.focus();
     }
   }
 
@@ -1622,6 +1632,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 11. KEYBOARD SHORTCUTS ---
   window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (isDrawerOpen) {
+        e.preventDefault();
+        closeDrawer();
+        return;
+      } else if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+        return;
+      }
+    }
+
     if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
     const upperKey = e.key.toUpperCase();
@@ -1670,9 +1691,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(isHidden ? 'ZERO-HUD (PRESS H)' : 'HUD VISIBLE');
     } else if (upperKey === 'M') {
       toggleMic();
-    } else if (e.key === 'Escape') {
-      if (isDrawerOpen) closeDrawer();
-      else if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     }
   });
 
